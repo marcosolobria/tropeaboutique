@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Journal — Tropea Boutique | Inspirations & Coulisses</title>
+  <meta name="description" content="Le journal de Tropea Boutique : inspirations, coulisses de création et conseils autour de l'artisanat fait main à Marseille."/>
+  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="../style.css"/>
+  <style>
+    /* ---- Blog page styles ---- */
+    .blog-page { background: var(--cream); min-height: 100vh; }
+
+    /* Hero */
+    .blog-hero {
+      padding: 80px 24px 64px; text-align: center;
+      background: linear-gradient(150deg, #fff8fb 0%, #fdf0e6 100%);
+      border-bottom: 1px solid rgba(0,0,0,.06);
+    }
+    .blog-hero .hero-label { display: block; margin-bottom: 18px; font-size: 11px; font-weight: 600; letter-spacing: 3.5px; text-transform: uppercase; color: var(--pink-dark); }
+    .blog-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(36px,6vw,60px); line-height: 1.1; margin-bottom: 16px; }
+    .blog-hero h1 em { color: var(--pink-dark); font-style: italic; }
+    .blog-hero p { color: #666; font-size: 16px; line-height: 1.7; max-width: 480px; margin: 0 auto; }
+
+    /* Category pills */
+    .blog-categories { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; padding: 36px 24px 0; }
+    .cat-pill {
+      padding: 8px 20px; border-radius: 50px; font-size: 12px; font-weight: 600;
+      letter-spacing: .5px; cursor: pointer; transition: all .2s;
+      border: 1.5px solid rgba(0,0,0,.1); background: white; color: #666;
+    }
+    .cat-pill.active, .cat-pill:hover { background: var(--black); color: white; border-color: var(--black); }
+
+    /* Featured article */
+    .blog-featured { max-width: 1100px; margin: 48px auto 0; padding: 0 24px; }
+    .featured-card {
+      display: grid; grid-template-columns: 1fr 1fr; border-radius: 24px;
+      overflow: hidden; background: white; box-shadow: 0 8px 40px rgba(0,0,0,.08);
+      text-decoration: none; color: var(--black); transition: transform .3s, box-shadow .3s;
+    }
+    .featured-card:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(0,0,0,.13); }
+    .featured-img {
+      background: linear-gradient(135deg, #fce8f3, #fdf0e6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 100px; min-height: 340px;
+    }
+    .featured-body { padding: 48px 40px; display: flex; flex-direction: column; justify-content: center; gap: 16px; }
+    .featured-label { font-size: 10px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: var(--pink-dark); }
+    .featured-body h2 { font-family: 'Playfair Display', serif; font-size: clamp(22px,3vw,30px); line-height: 1.25; }
+    .featured-body p { font-size: 15px; color: #666; line-height: 1.75; }
+    .featured-meta { display: flex; align-items: center; gap: 16px; font-size: 12px; color: #999; margin-top: 4px; }
+    .read-btn { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--pink-dark); letter-spacing: .3px; margin-top: 8px; }
+    .read-btn:hover { gap: 12px; }
+    @media (max-width: 700px) { .featured-card { grid-template-columns: 1fr; } .featured-img { min-height: 220px; font-size: 72px; } .featured-body { padding: 28px; } }
+
+    /* Articles grid */
+    .blog-section-title { max-width: 1100px; margin: 60px auto 24px; padding: 0 24px; font-family: 'Playfair Display', serif; font-size: 22px; color: #999; font-weight: 400; font-style: italic; }
+    .blog-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px,1fr)); gap: 28px; padding: 0 24px 100px; max-width: 1100px; margin: 0 auto; }
+    .blog-card {
+      background: white; border-radius: 20px; overflow: hidden;
+      box-shadow: 0 4px 24px rgba(0,0,0,.07);
+      transition: transform .25s, box-shadow .25s;
+      text-decoration: none; color: var(--black); display: flex; flex-direction: column;
+    }
+    .blog-card:hover { transform: translateY(-6px); box-shadow: 0 16px 48px rgba(0,0,0,.12); }
+    .blog-card-img {
+      height: 220px; display: flex; align-items: center; justify-content: center;
+      font-size: 72px; position: relative;
+    }
+    .blog-card-img.bg-rose  { background: linear-gradient(135deg, #fce8f3, #fdf0e6); }
+    .blog-card-img.bg-sand  { background: linear-gradient(135deg, #fdf0e6, #fce8d3); }
+    .blog-card-img.bg-mint  { background: linear-gradient(135deg, #e8f5ef, #edf8f2); }
+    .blog-card-img.bg-sky   { background: linear-gradient(135deg, #e8f0fd, #eaf5ff); }
+    .blog-card-body { padding: 26px; flex: 1; display: flex; flex-direction: column; gap: 10px; }
+    .blog-tag { font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--pink-dark); }
+    .blog-card h2 { font-family: 'Playfair Display', serif; font-size: 19px; line-height: 1.3; }
+    .blog-card p { font-size: 13px; color: #777; line-height: 1.7; flex: 1; }
+    .blog-card-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 8px; }
+    .blog-date { font-size: 11px; color: #bbb; }
+    .read-more { font-size: 12px; font-weight: 600; color: var(--pink-dark); letter-spacing: .3px; }
+
+    /* CTA strip */
+    .blog-cta {
+      background: var(--black); color: white; text-align: center;
+      padding: 64px 24px; margin-bottom: 0;
+    }
+    .blog-cta h2 { font-family: 'Playfair Display', serif; font-size: clamp(24px,4vw,38px); margin-bottom: 12px; }
+    .blog-cta p { color: rgba(255,255,255,.65); font-size: 15px; margin-bottom: 32px; }
+    .blog-cta .btn-primary { background: var(--pink-dark); }
+    .blog-cta .btn-primary:hover { background: #c0506a; }
+  </style>
+</head>
+<body class="blog-page">
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="/" class="nav-logo"><img src="../assets/logo.svg" alt="Tropea Boutique" class="nav-logo-img"/></a>
+    <div class="nav-center-links">
+      <a href="/" class="nav-link">Boutique</a>
+      <a href="index.html" class="nav-link" style="color:var(--black);font-weight:600">Journal</a>
+      <a href="../contacto.html" class="nav-link">Contact</a>
+    </div>
+    <div class="nav-right">
+      <a href="https://www.instagram.com/tropeaboutique" target="_blank" class="nav-ig">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="blog-hero">
+    <span class="hero-label">Journal</span>
+    <h1>Nos histoires<br/><em>d'amour</em> artisanal</h1>
+    <p>Inspirations, coulisses de création et la poésie derrière chaque pièce faite main.</p>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="blog-categories">
+    <button class="cat-pill active">Tout</button>
+    <button class="cat-pill">Création</button>
+    <button class="cat-pill">Coulisses</button>
+    <button class="cat-pill">Idées cadeaux</button>
+    <button class="cat-pill">Inspiration</button>
+  </div>
+
+  <!-- FEATURED -->
+  <div class="blog-featured">
+    <a class="featured-card" href="coques-telephone-faites-main-marseille.html">
+      <div class="featured-img">🐚</div>
+      <div class="featured-body">
+        <span class="featured-label">À la une · Création & Artisanat</span>
+        <h2>Comment naît une coque Tropea ? De la coque vierge à la pièce unique</h2>
+        <p>Un pinceau, de la peinture, beaucoup d'amour — et une pièce qui ne ressemblera à aucune autre. Découvrez notre processus de création, étape par étape, depuis l'inspiration jusqu'à l'emballage avec soin.</p>
+        <div class="featured-meta">
+          <span>Juin 2026</span>
+          <span>·</span>
+          <span>5 min de lecture</span>
+        </div>
+        <span class="read-btn">Lire l'article →</span>
+      </div>
+    </a>
+  </div>
+
+  <!-- AUTRES ARTICLES -->
+  <p class="blog-section-title">Autres histoires</p>
+  <div class="blog-grid">
+    <a class="blog-card" href="tote-bag-peint-main.html">
+      <div class="blog-card-img bg-rose">🌺</div>
+      <div class="blog-card-body">
+        <span class="blog-tag">Tote Bags · Peinture</span>
+        <h2>Tote bag peint à la main : beauté, amour et éco-responsabilité</h2>
+        <p>Pourquoi choisir un tote bag artisanal ? Entre mode, durabilité et unicité, on vous dit tout sur cet accessoire qui porte une histoire.</p>
+        <div class="blog-card-footer">
+          <span class="blog-date">Mai 2026</span>
+          <span class="read-more">Lire →</span>
+        </div>
+      </div>
+    </a>
+    <a class="blog-card" href="idee-cadeau-unique.html">
+      <div class="blog-card-img bg-sand">🎁</div>
+      <div class="blog-card-body">
+        <span class="blog-tag">Idées cadeaux</span>
+        <h2>5 cadeaux faits main qui disent « je t'aime » mieux que les mots</h2>
+        <p>Des cadeaux qui sortent de l'ordinaire et viennent du cœur — parce que le plus beau cadeau, c'est celui qu'on a choisi avec amour.</p>
+        <div class="blog-card-footer">
+          <span class="blog-date">Avril 2026</span>
+          <span class="read-more">Lire →</span>
+        </div>
+      </div>
+    </a>
+    <a class="blog-card" href="#">
+      <div class="blog-card-img bg-mint">🌊</div>
+      <div class="blog-card-body">
+        <span class="blog-tag">Inspiration · Marseille</span>
+        <h2>Marseille, la mer et les couleurs qui nous inspirent chaque jour</h2>
+        <p>La lumière du Vieux-Port au lever du soleil, le bleu profond de la Méditerranée… Marseille est notre muse silencieuse.</p>
+        <div class="blog-card-footer">
+          <span class="blog-date">Mars 2026</span>
+          <span class="read-more">Lire →</span>
+        </div>
+      </div>
+    </a>
+    <a class="blog-card" href="#">
+      <div class="blog-card-img bg-sky">✨</div>
+      <div class="blog-card-body">
+        <span class="blog-tag">Coulisses</span>
+        <h2>Dans les coulisses de Tropea : une journée de création</h2>
+        <p>Du café du matin aux derniers coups de pinceau du soir — venez vivre avec nous une journée de création artisanale.</p>
+        <div class="blog-card-footer">
+          <span class="blog-date">Février 2026</span>
+          <span class="read-more">Lire →</span>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <!-- CTA -->
+  <div class="blog-cta">
+    <h2>Une pièce qui vous ressemble ?</h2>
+    <p>Chaque commande personnalisée est une nouvelle histoire d'amour à écrire ensemble.</p>
+    <a href="../contacto.html" class="btn-primary">Créer ma pièce unique</a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <img src="../assets/logo.svg" alt="Tropea Boutique" class="footer-logo"/>
+      <p>© 2026 Tropea Boutique · Marseille 🐟</p>
+      <div class="footer-links" style="display:flex;gap:16px;flex-wrap:wrap">
+        <a href="/">Boutique</a>
+        <a href="../contacto.html">Contact</a>
+        <a href="../privacidad.html">Confidentialité</a>
+        <a href="../terminos.html">Conditions</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll('.cat-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+      });
+    });
+  </script>
+</body>
+</html>

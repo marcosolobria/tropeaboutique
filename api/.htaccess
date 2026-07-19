@@ -1,0 +1,5 @@
+# Solo telegram.php es accesible desde fuera; config.php nunca
+<Files "config.php">
+  Order allow,deny
+  Deny from all
+</Files>

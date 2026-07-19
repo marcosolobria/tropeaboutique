@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Contact — Tropea Boutique</title>
+  <meta name="description" content="Contactez Tropea Boutique pour une commande personnalisée faite main. Coques et tote bags artisanaux à Marseille. Contáctanos para pedidos personalizados."/>
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* ---- Contact page ---- */
+    .cpage-hero {
+      padding: 80px 24px 64px; text-align: center;
+      background: linear-gradient(150deg, #fff8fb 0%, #fdf0e6 100%);
+      border-bottom: 1px solid rgba(0,0,0,.06);
+    }
+    .cpage-hero .hero-label { display: block; margin-bottom: 18px; }
+    .cpage-hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(34px,6vw,58px); line-height: 1.1; margin-bottom: 16px; }
+    .cpage-hero h1 em { color: var(--pink-dark); font-style: italic; }
+    .cpage-hero p { font-size: 16px; color: #666; line-height: 1.75; max-width: 500px; margin: 0 auto; }
+
+    /* Main layout */
+    .cpage-body { max-width: 1000px; margin: 0 auto; padding: 64px 24px 100px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    @media (max-width: 720px) { .cpage-body { grid-template-columns: 1fr; gap: 40px; } }
+
+    /* Contact channels */
+    .cpage-channels { display: flex; flex-direction: column; gap: 16px; }
+    .cpage-section-label { font-size: 11px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: var(--pink-dark); margin-bottom: 4px; display: block; }
+    .cpage-title { font-family: 'Playfair Display', serif; font-size: 28px; line-height: 1.2; margin-bottom: 20px; }
+    .channel-card {
+      display: flex; align-items: center; gap: 18px;
+      background: white; border-radius: 18px; padding: 22px 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.06); text-decoration: none; color: var(--black);
+      transition: transform .25s, box-shadow .25s; border: 1.5px solid transparent;
+    }
+    .channel-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,.11); border-color: var(--pink); }
+    .channel-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .icon-wa { background: #25D366; }
+    .icon-ig { background: linear-gradient(135deg, #f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
+    .icon-mail { background: var(--black); }
+    .channel-info h3 { font-family: 'Playfair Display', serif; font-size: 18px; margin-bottom: 4px; }
+    .channel-info p { font-size: 13px; color: #888; line-height: 1.4; }
+    .channel-arrow { margin-left: auto; font-size: 18px; color: #ccc; transition: transform .2s, color .2s; }
+    .channel-card:hover .channel-arrow { transform: translateX(4px); color: var(--pink-dark); }
+
+    /* Love quote */
+    .love-quote {
+      background: var(--black); color: white; border-radius: 20px;
+      padding: 36px 32px; text-align: center; margin-top: 8px;
+    }
+    .love-quote blockquote { font-family: 'Playfair Display', serif; font-size: 20px; font-style: italic; line-height: 1.6; margin-bottom: 12px; }
+    .love-quote cite { font-size: 12px; opacity: .5; letter-spacing: 1px; text-transform: uppercase; }
+
+    /* Form */
+    .cpage-form-wrap {}
+    .cpage-form-wrap .cpage-section-label { margin-bottom: 4px; }
+    .cpage-form-wrap .cpage-title { margin-bottom: 24px; }
+    .form-group { margin-bottom: 18px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; letter-spacing: .5px; color: #555; margin-bottom: 7px; }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 13px 16px; border: 1.5px solid rgba(0,0,0,.12);
+      border-radius: 12px; font-family: 'Inter', sans-serif; font-size: 14px;
+      background: white; color: var(--black); transition: border-color .2s, box-shadow .2s;
+      outline: none; resize: none;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--pink-dark); box-shadow: 0 0 0 3px rgba(212,96,122,.1);
+    }
+    .form-group textarea { min-height: 130px; line-height: 1.6; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+    .form-submit { width: 100%; padding: 16px; border-radius: 12px; margin-top: 4px; font-size: 15px; font-weight: 600; letter-spacing: .3px; }
+    .form-note { font-size: 12px; color: #999; text-align: center; margin-top: 14px; line-height: 1.6; }
+    .form-success { display: none; background: #e8f5ef; border: 1.5px solid #25D366; border-radius: 14px; padding: 20px; text-align: center; color: #1a7a40; font-size: 14px; margin-top: 16px; }
+
+    /* FAQ */
+    .cpage-faq { max-width: 1000px; margin: 0 auto 80px; padding: 0 24px; }
+    .cpage-faq h2 { font-family: 'Playfair Display', serif; font-size: 30px; margin-bottom: 28px; }
+    .faq-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 680px) { .faq-grid { grid-template-columns: 1fr; } }
+    .faq-card { background: white; border-radius: 16px; padding: 24px; box-shadow: 0 2px 16px rgba(0,0,0,.05); }
+    .faq-q { font-weight: 600; font-size: 14px; margin-bottom: 10px; display: flex; gap: 10px; }
+    .faq-q .faq-ico { flex-shrink: 0; }
+    .faq-a { font-size: 13px; color: #666; line-height: 1.75; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="/" class="nav-logo"><img src="assets/logo.svg" alt="Tropea Boutique" class="nav-logo-img"/></a>
+    <div class="nav-center-links">
+      <a href="/" class="nav-link">Boutique</a>
+      <a href="blog/index.html" class="nav-link">Journal</a>
+      <a href="contacto.html" class="nav-link" style="color:var(--black);font-weight:600">Contact</a>
+    </div>
+    <div class="nav-right">
+      <a href="https://www.instagram.com/tropeaboutique" target="_blank" class="nav-ig">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      </a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="cpage-hero">
+    <span class="hero-label">Contact</span>
+    <h1>Créons quelque chose<br/><em>d'unique ensemble</em></h1>
+    <p data-fr="Chaque pièce est une histoire d'amour. Dis-nous la tienne et on la dessine pour toi." data-es="Cada pieza es una historia de amor. Cuéntanos la tuya y la dibujamos para ti.">Chaque pièce est une histoire d'amour. Dis-nous la tienne et on la dessine pour toi.</p>
+  </div>
+
+  <!-- BODY: CHANNELS + FORM -->
+  <div class="cpage-body">
+
+    <!-- Left: channels + quote -->
+    <div class="cpage-channels">
+      <span class="cpage-section-label">Nous trouver</span>
+      <h2 class="cpage-title">Parlons-nous</h2>
+
+      <a class="channel-card" href="https://wa.me/33621839919?text=Bonjour%20Tropea%20!%20Je%20voudrais%20une%20pi%C3%A8ce%20personnalis%C3%A9e." target="_blank">
+        <div class="channel-icon icon-wa">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        </div>
+        <div class="channel-info">
+          <h3>WhatsApp</h3>
+          <p>+33 6 21 83 99 19 · Réponse rapide</p>
+        </div>
+        <span class="channel-arrow">→</span>
+      </a>
+
+      <a class="channel-card" href="https://www.instagram.com/tropeaboutique" target="_blank">
+        <div class="channel-icon icon-ig">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="white" stroke="none"/></svg>
+        </div>
+        <div class="channel-info">
+          <h3>Instagram</h3>
+          <p>@tropeaboutique · DM ouvert</p>
+        </div>
+        <span class="channel-arrow">→</span>
+      </a>
+
+      <div class="love-quote">
+        <blockquote>« L'amour se cache dans les petits détails — et c'est là qu'on le coud, le peint et l'emballe pour toi. »</blockquote>
+        <cite>— Tropea Boutique, Marseille</cite>
+      </div>
+    </div>
+
+    <!-- Right: form -->
+    <div class="cpage-form-wrap">
+      <span class="cpage-section-label">Message</span>
+      <h2 class="cpage-title">Envoie-nous ton idée</h2>
+      <form id="contact-form" novalidate>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="cf-name">Prénom / Nombre</label>
+            <input type="text" id="cf-name" placeholder="Sophie" required/>
+          </div>
+          <div class="form-group">
+            <label for="cf-email">Email</label>
+            <input type="email" id="cf-email" placeholder="sophie@email.com" required/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="cf-type">Type de demande</label>
+          <select id="cf-type">
+            <option value="">Choisir…</option>
+            <option>Commande personnalisée</option>
+            <option>Question sur un produit</option>
+            <option>Suivi de commande</option>
+            <option>Autre</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="cf-msg">Ton message ✨</label>
+          <textarea id="cf-msg" placeholder="Raconte-nous ton idée, le modèle de téléphone, les couleurs… on adore les détails !" required></textarea>
+        </div>
+        <button type="submit" class="btn-primary form-submit">Envoyer mon message 💌</button>
+        <p class="form-note">On répond dans les 24h. Pour les urgences, WhatsApp est plus rapide !</p>
+        <div class="form-success" id="form-success">
+          ✅ Message envoyé ! On te répond très vite avec beaucoup d'amour 🌸
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+  <!-- FAQ -->
+  <div class="cpage-faq">
+    <h2>Questions fréquentes</h2>
+    <div class="faq-grid">
+      <div class="faq-card">
+        <p class="faq-q"><span class="faq-ico">🎨</span> Puis-je commander une pièce unique ?</p>
+        <p class="faq-a">Oui, c'est même ce qu'on préfère ! Contacte-nous avec ton idée et on crée quelque chose de totalement unique pour toi. ¡Sí, es lo que más nos gusta!</p>
+      </div>
+      <div class="faq-card">
+        <p class="faq-q"><span class="faq-ico">📦</span> Délais de livraison ?</p>
+        <p class="faq-a">France : 5–7 jours ouvrés. Espagne : 7–10 jours. Pièces personnalisées : ajouter 3–5 jours de création. Francia: 5–7 días. España: 7–10 días.</p>
+      </div>
+      <div class="faq-card">
+        <p class="faq-q"><span class="faq-ico">💳</span> Modes de paiement</p>
+        <p class="faq-a">Virement, Bizum ou PayPal. Un acompte de 50% est demandé pour les commandes personnalisées. Transferencia, Bizum o PayPal. Anticipo del 50%.</p>
+      </div>
+      <div class="faq-card">
+        <p class="faq-q"><span class="faq-ico">📱</span> Modèles de téléphone disponibles ?</p>
+        <p class="faq-a">iPhone et Samsung principalement. Contacte-nous avec ton modèle exact et on vérifie ! Principalmente iPhone y Samsung. ¡Pregúntanos tu modelo!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container footer-inner">
+      <img src="assets/logo.svg" alt="Tropea Boutique" class="footer-logo"/>
+      <p>© 2026 Tropea Boutique · Marseille 🐟</p>
+      <div class="footer-links" style="display:flex;gap:16px;flex-wrap:wrap">
+        <a href="/">Boutique</a>
+        <a href="blog/index.html">Journal</a>
+        <a href="privacidad.html">Confidentialité</a>
+        <a href="terminos.html">Conditions</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const lang = navigator.language.startsWith('es') ? 'es' : 'fr';
+    if (lang === 'es') document.querySelectorAll('[data-es]').forEach(el => { el.textContent = el.dataset.es; });
+
+    document.getElementById('contact-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const name  = document.getElementById('cf-name').value.trim();
+      const email = document.getElementById('cf-email').value.trim();
+      const type  = document.getElementById('cf-type').value;
+      const msg   = document.getElementById('cf-msg').value.trim();
+      if (!name || !email || !msg) return;
+      // Guardar en servidor
+      const fd = new FormData();
+      fd.append('name', name); fd.append('email', email);
+      fd.append('type', type); fd.append('message', msg);
+      fetch('/api/save_message.php', {method:'POST', body: fd}).catch(()=>{});
+      // Abrir WhatsApp
+      const waMsg = encodeURIComponent(`Bonjour Tropea ! Je m'appelle ${name} (${email}) et j'aimerais : ${msg}`);
+      window.open(`https://wa.me/33621839919?text=${waMsg}`, '_blank');
+      document.getElementById('form-success').style.display = 'block';
+      this.reset();
+    });
+  </script>
+</body>
+</html>

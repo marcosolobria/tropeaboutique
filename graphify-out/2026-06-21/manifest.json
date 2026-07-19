@@ -1,0 +1,137 @@
+{
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/.claude/launch.json": {
+    "mtime": 1781462596.4817376,
+    "ast_hash": "d6bc2c052228ff86d321e72b45bd663c",
+    "semantic_hash": "d6bc2c052228ff86d321e72b45bd663c"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/.claude/settings.json": {
+    "mtime": 1781858940.6833754,
+    "ast_hash": "e1073342e958ac9f00716938c8f165e3",
+    "semantic_hash": "e1073342e958ac9f00716938c8f165e3"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/.claude/settings.local.json": {
+    "mtime": 1781858992.4448805,
+    "ast_hash": "257659e46cb10cd821758b3dc90c7add",
+    "semantic_hash": "257659e46cb10cd821758b3dc90c7add"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/admin/api.php": {
+    "mtime": 1781550330.3589203,
+    "ast_hash": "8105fddbd98b954dc2aa745fe96a82b3",
+    "semantic_hash": "8105fddbd98b954dc2aa745fe96a82b3"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/admin/auth.php": {
+    "mtime": 1781549560.2470129,
+    "ast_hash": "bea8f189292f3094afff617523de867a",
+    "semantic_hash": "bea8f189292f3094afff617523de867a"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/admin/config.php": {
+    "mtime": 1781549548.5176172,
+    "ast_hash": "4b85f42b0d238b260679f6781ade8198",
+    "semantic_hash": "4b85f42b0d238b260679f6781ade8198"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/admin/dashboard.php": {
+    "mtime": 1781550482.4678233,
+    "ast_hash": "581c55208ca493e6dea978a52de06ebc",
+    "semantic_hash": "581c55208ca493e6dea978a52de06ebc"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/admin/data/messages.json": {
+    "mtime": 1781549748.1112998,
+    "ast_hash": "58e0494c51d30eb3494f7c9198986bb9",
+    "semantic_hash": "58e0494c51d30eb3494f7c9198986bb9"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/admin/index.php": {
+    "mtime": 1781549612.3865144,
+    "ast_hash": "d07e49d20c0bdc0cf939dbdfcaa9a1b7",
+    "semantic_hash": "d07e49d20c0bdc0cf939dbdfcaa9a1b7"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/admin/logout.php": {
+    "mtime": 1781549722.7264786,
+    "ast_hash": "6eb64cc3e1c03f60286a2a60a6ee13c5",
+    "semantic_hash": "6eb64cc3e1c03f60286a2a60a6ee13c5"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/api/config.php": {
+    "mtime": 1781469126.2022922,
+    "ast_hash": "d77f0083b95651647fcf981425ac30fa",
+    "semantic_hash": "d77f0083b95651647fcf981425ac30fa"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/api/save_message.php": {
+    "mtime": 1781549732.5462322,
+    "ast_hash": "292d79493a8735353fbd4909a7959c86",
+    "semantic_hash": "292d79493a8735353fbd4909a7959c86"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/api/telegram.php": {
+    "mtime": 1781469134.780857,
+    "ast_hash": "03de93bfa051aa34768a7ffb78c046ed",
+    "semantic_hash": "03de93bfa051aa34768a7ffb78c046ed"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/app.js": {
+    "mtime": 1781469097.654379,
+    "ast_hash": "5874f75f252930c1a0180c60b092e7d0",
+    "semantic_hash": "5874f75f252930c1a0180c60b092e7d0"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/products.json": {
+    "mtime": 1781469090.1703212,
+    "ast_hash": "58e0494c51d30eb3494f7c9198986bb9",
+    "semantic_hash": "58e0494c51d30eb3494f7c9198986bb9"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/CLAUDE.md": {
+    "mtime": 1781858940.6831634,
+    "ast_hash": "82efb97a359f5c7290bf2513d14686be",
+    "semantic_hash": "82efb97a359f5c7290bf2513d14686be"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/blog/coques-telephone-faites-main-marseille.html": {
+    "mtime": 1781466716.268026,
+    "ast_hash": "9e15e60bbc406560a44ec0f45d295cc1",
+    "semantic_hash": "9e15e60bbc406560a44ec0f45d295cc1"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/blog/idee-cadeau-unique.html": {
+    "mtime": 1781466814.1365833,
+    "ast_hash": "04bad609f16992f2c2aa1dbe50b90623",
+    "semantic_hash": "04bad609f16992f2c2aa1dbe50b90623"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/blog/index.html": {
+    "mtime": 1781504739.996879,
+    "ast_hash": "1181e8ebd907b14b2f524c15d1a68f78",
+    "semantic_hash": "1181e8ebd907b14b2f524c15d1a68f78"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/blog/tote-bag-peint-main.html": {
+    "mtime": 1781466766.224494,
+    "ast_hash": "9394dbd8790f8e86c1c32d540b6c9d0b",
+    "semantic_hash": "9394dbd8790f8e86c1c32d540b6c9d0b"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/contacto.html": {
+    "mtime": 1781549743.449574,
+    "ast_hash": "d22d76e9b40be9556cce4f94ba6c2219",
+    "semantic_hash": "d22d76e9b40be9556cce4f94ba6c2219"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/index.html": {
+    "mtime": 1781674364.4011803,
+    "ast_hash": "b33d841c762e3ccb627292f6cfbacfe0",
+    "semantic_hash": "b33d841c762e3ccb627292f6cfbacfe0"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/privacidad.html": {
+    "mtime": 1781466571.5247622,
+    "ast_hash": "b62cd74739b41640f948424aa5733cf4",
+    "semantic_hash": "b62cd74739b41640f948424aa5733cf4"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/terminos.html": {
+    "mtime": 1781466601.5776567,
+    "ast_hash": "2b07ffaddca85cef65a1ab3848842c2e",
+    "semantic_hash": "2b07ffaddca85cef65a1ab3848842c2e"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/assets/logo.svg": {
+    "mtime": 1781672903.3635423,
+    "ast_hash": "a0744122a2ca2c9caef7e9d0fc6518cc",
+    "semantic_hash": "a0744122a2ca2c9caef7e9d0fc6518cc"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/assets/og.png": {
+    "mtime": 1781672979.5016878,
+    "ast_hash": "aa3dc9ee72686c5a95970388098e4d0a",
+    "semantic_hash": "aa3dc9ee72686c5a95970388098e4d0a"
+  },
+  "/Users/joseantoniomarcojerez/Projects/tropeaboutique/assets/og.svg": {
+    "mtime": 1781648831.9061418,
+    "ast_hash": "96a0123645c90f4061bea348990ecff3",
+    "semantic_hash": "96a0123645c90f4061bea348990ecff3"
+  }
+}

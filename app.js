@@ -2,7 +2,7 @@
 // Reemplazar con tus credenciales de Supabase
 const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
 const SUPABASE_ANON_KEY = 'YOUR_ANON_KEY';
-const WA_NUMBER = '34XXXXXXXXX'; // número de WhatsApp de María
+const WA_NUMBER = '33621839919';
 
 /* ===== DEMO PRODUCTS (mientras no hay Supabase) ===== */
 const DEMO_PRODUCTS = [
@@ -103,21 +103,18 @@ function applyLang() {
 /* ===== PRODUCTS ===== */
 async function loadProducts() {
   try {
-    if (SUPABASE_URL.includes('YOUR_PROJECT')) {
-      products = DEMO_PRODUCTS;
+    const res = await fetch('/products.json?v=' + Date.now());
+    if (res.ok) {
+      const data = await res.json();
+      products = Array.isArray(data) && data.length > 0 ? data : DEMO_PRODUCTS;
     } else {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/products?select=*&order=created_at.desc`, {
-        headers: { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` }
-      });
-      products = await res.json();
+      products = DEMO_PRODUCTS;
     }
-    buildCollectionFilters();
-    renderProducts();
   } catch (e) {
     products = DEMO_PRODUCTS;
-    buildCollectionFilters();
-    renderProducts();
   }
+  buildCollectionFilters();
+  renderProducts();
 }
 
 function buildCollectionFilters() {

@@ -7,8 +7,14 @@
   <meta name="description" content="Tropea Boutique — Coques et tote bags faits main. Accessoires uniques inspirés des tropiques. Handmade accessories. Accesorios artesanales."/>
   <meta property="og:title" content="Tropea Boutique"/>
   <meta property="og:description" content="Accessoires faits main — Handmade accessories"/>
-  <meta property="og:image" content="https://tropeaboutique.com/assets/og.jpg"/>
-  <link rel="icon" href="assets/logo.png"/>
+  <meta property="og:image" content="https://tropeaboutique.com/assets/og.png"/>
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://tropeaboutique.com"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:image" content="https://tropeaboutique.com/assets/og.png"/>
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="style.css"/>
@@ -18,31 +24,343 @@
   <!-- NAV -->
   <nav class="nav">
     <a href="/" class="nav-logo">
-      <img src="assets/logo.png" alt="Tropea Boutique" class="nav-logo-img"/>
+      <img src="assets/logo.svg" alt="Tropea Boutique" class="nav-logo-img"/>
     </a>
-    <div class="nav-links">
-      <button class="lang-btn active" data-lang="fr">FR</button>
-      <span class="lang-sep">|</span>
-      <button class="lang-btn" data-lang="es">ES</button>
+    <div class="nav-center-links">
+      <a href="#collections" class="nav-link" data-fr="Boutique" data-es="Tienda">Boutique</a>
+      <a href="blog/index.html" class="nav-link" data-fr="Journal" data-es="Blog">Journal</a>
+      <a href="contacto.html" class="nav-link" data-fr="Contact" data-es="Contacto">Contact</a>
     </div>
-    <a href="https://www.instagram.com/tropeaboutique" target="_blank" class="nav-ig">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-    </a>
+    <div class="nav-right">
+      <div class="nav-langs">
+        <button class="lang-btn active" data-lang="fr">FR</button>
+        <span class="lang-sep">|</span>
+        <button class="lang-btn" data-lang="es">ES</button>
+      </div>
+      <a href="https://www.instagram.com/tropeaboutique" target="_blank" class="nav-ig">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      </a>
+    </div>
   </nav>
 
   <!-- HERO -->
   <section class="hero">
     <div class="hero-content">
-      <p class="hero-label" data-fr="Nouvelle collection" data-es="Nueva colección">Nouvelle collection</p>
-      <h1 class="hero-title">Tropea<br/><em>Boutique</em></h1>
-      <p class="hero-sub" data-fr="Accessoires faits main · Uniques · Avec amour" data-es="Accesorios hechos a mano · Únicos · Con amor">Accessoires faits main · Uniques · Avec amour</p>
-      <a href="#collections" class="btn-primary" data-fr="Découvrir" data-es="Descubrir">Découvrir</a>
+      <p class="hero-label" data-fr="Fait avec amour à Marseille" data-es="Hecho con amor en Marsella">Fait avec amour à Marseille</p>
+      <h1 class="hero-title">
+        <span data-fr="L'amour" data-es="El amor">L'amour</span><br/>
+        <em data-fr="dans chaque détail" data-es="en cada detalle">dans chaque détail</em>
+      </h1>
+      <p class="hero-sub" data-fr="Des pièces uniques, nées d'une passion folle pour les couleurs, la mer et la beauté des petites choses." data-es="Piezas únicas, nacidas de una pasión loca por los colores, el mar y la belleza de las pequeñas cosas.">Des pièces uniques, nées d'une passion folle pour les couleurs, la mer et la beauté des petites choses.</p>
+      <div class="hero-actions">
+        <a href="#collections" class="btn-primary" data-fr="Découvrir la collection" data-es="Descubrir la colección">Découvrir la collection</a>
+        <a href="contacto.html" class="btn-ghost" data-fr="Commande personnalisée" data-es="Pedido personalizado">Commande personnalisée</a>
+      </div>
     </div>
+
+    <!-- Rayos de luz solar atravesando el agua -->
+    <div class="sun-rays" aria-hidden="true">
+      <span class="ray r1"></span>
+      <span class="ray r2"></span>
+      <span class="ray r3"></span>
+      <span class="ray r4"></span>
+    </div>
+
+    <!-- Cáusticas: reflejos de luz ondulantes en el fondo -->
+    <div class="caustics" aria-hidden="true"></div>
+
+    <!-- Partículas de sedimento flotando -->
+    <div class="sediment" aria-hidden="true">
+      <span class="speck s1"></span><span class="speck s2"></span><span class="speck s3"></span>
+      <span class="speck s4"></span><span class="speck s5"></span><span class="speck s6"></span>
+      <span class="speck s7"></span><span class="speck s8"></span><span class="speck s9"></span>
+      <span class="speck s10"></span><span class="speck s11"></span><span class="speck s12"></span>
+    </div>
+
+    <!-- Fondo de mar -->
+    <div class="hero-sea">
+      <svg class="sea-wave" viewBox="0 0 1440 200" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path class="w1" d="M0,50 C200,110 400,0 600,55 C800,110 1000,5 1200,55 C1320,85 1390,45 1440,55 L1440,200 L0,200 Z"/>
+        <path class="w2" d="M0,85 C180,40 360,125 540,85 C720,40 900,125 1080,85 C1260,40 1370,100 1440,85 L1440,200 L0,200 Z"/>
+        <path class="w3" d="M0,115 C150,80 300,140 450,115 C600,80 750,140 900,115 C1050,80 1200,140 1350,115 C1400,105 1430,120 1440,115 L1440,200 L0,200 Z"/>
+      </svg>
+      <!-- Lecho marino: arena + algas + rocas -->
+      <svg class="seabed" viewBox="0 0 1440 160" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bladeGradDark" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#2c6e4f"/>
+            <stop offset="45%" stop-color="#4ea582"/>
+            <stop offset="100%" stop-color="#2c6e4f"/>
+          </linearGradient>
+          <linearGradient id="bladeGradLight" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#3a8064"/>
+            <stop offset="45%" stop-color="#6cc09c"/>
+            <stop offset="100%" stop-color="#3a8064"/>
+          </linearGradient>
+        </defs>
+        <path d="M0,60 C200,30 350,75 550,50 C750,25 900,65 1100,45 C1250,30 1350,55 1440,40 L1440,160 L0,160 Z" fill="#cfa86e" opacity=".55"/>
+        <ellipse cx="120" cy="95" rx="55" ry="14" fill="#9c7a48" opacity=".35"/>
+        <ellipse cx="980" cy="105" rx="70" ry="16" fill="#9c7a48" opacity=".30"/>
+        <ellipse cx="1300" cy="92" rx="48" ry="12" fill="#9c7a48" opacity=".32"/>
+
+        <!-- Cada alga: base fija + punta con balanceo adicional para movimiento natural en dos tramos -->
+        <g class="seaweed-root">
+          <g class="seaweed sw1" style="transform-origin:60px 160px">
+            <path d="M54,160 C52,148 65,140 55,130 L65,130 C67,140 63,148 66,160 Z" fill="url(#bladeGradDark)"/>
+            <g class="seaweed-tip stip1" style="transform-origin:60px 130px">
+              <path d="M55,130 C53,108 57,98 60,90 C63,98 67,108 65,130 Z" fill="url(#bladeGradDark)"/>
+            </g>
+          </g>
+        </g>
+        <g class="seaweed-root">
+          <g class="seaweed sw2" style="transform-origin:95px 160px">
+            <path d="M90,160 C88,144 99,136 91,126 L99,126 C101,136 97,144 100,160 Z" fill="url(#bladeGradLight)"/>
+            <g class="seaweed-tip stip2" style="transform-origin:95px 126px">
+              <path d="M91,126 C89,101 92,89 95,80 C98,89 101,101 99,126 Z" fill="url(#bladeGradLight)"/>
+            </g>
+          </g>
+        </g>
+        <g class="seaweed-root">
+          <g class="seaweed sw3" style="transform-origin:260px 160px">
+            <path d="M254,160 C252,146 265,138 255,128 L265,128 C267,138 263,146 266,160 Z" fill="url(#bladeGradDark)"/>
+            <g class="seaweed-tip stip3" style="transform-origin:260px 128px">
+              <path d="M255,128 C253,104 257,94 260,85 C263,94 267,104 265,128 Z" fill="url(#bladeGradDark)"/>
+            </g>
+          </g>
+        </g>
+        <g class="seaweed-root">
+          <g class="seaweed sw4" style="transform-origin:420px 160px">
+            <path d="M415,160 C413,150 424,142 416,132 L424,132 C426,142 422,150 425,160 Z" fill="url(#bladeGradLight)"/>
+            <g class="seaweed-tip stip4" style="transform-origin:420px 132px">
+              <path d="M416,132 C414,112 417,102 420,95 C423,102 426,112 424,132 Z" fill="url(#bladeGradLight)"/>
+            </g>
+          </g>
+        </g>
+        <g class="seaweed-root">
+          <g class="seaweed sw5" style="transform-origin:700px 160px">
+            <path d="M694,160 C692,140 705,132 695,122 L705,122 C707,132 703,140 706,160 Z" fill="url(#bladeGradDark)"/>
+            <g class="seaweed-tip stip5" style="transform-origin:700px 122px">
+              <path d="M695,122 C693,98 697,87 700,78 C703,87 707,98 705,122 Z" fill="url(#bladeGradDark)"/>
+            </g>
+          </g>
+        </g>
+        <g class="seaweed-root">
+          <g class="seaweed sw6" style="transform-origin:940px 160px">
+            <path d="M935,160 C933,146 944,138 936,128 L944,128 C946,138 942,146 945,160 Z" fill="url(#bladeGradLight)"/>
+            <g class="seaweed-tip stip6" style="transform-origin:940px 128px">
+              <path d="M936,128 C934,106 937,96 940,88 C943,96 946,106 944,128 Z" fill="url(#bladeGradLight)"/>
+            </g>
+          </g>
+        </g>
+        <g class="seaweed-root">
+          <g class="seaweed sw7" style="transform-origin:1130px 160px">
+            <path d="M1124,160 C1122,142 1135,134 1125,124 L1135,124 C1137,134 1133,142 1136,160 Z" fill="url(#bladeGradDark)"/>
+            <g class="seaweed-tip stip7" style="transform-origin:1130px 124px">
+              <path d="M1125,124 C1123,101 1127,90 1130,82 C1133,90 1137,101 1135,124 Z" fill="url(#bladeGradDark)"/>
+            </g>
+          </g>
+        </g>
+        <g class="seaweed-root">
+          <g class="seaweed sw8" style="transform-origin:1240px 160px">
+            <path d="M1235,160 C1233,148 1244,140 1236,130 L1244,130 C1246,140 1242,148 1245,160 Z" fill="url(#bladeGradLight)"/>
+            <g class="seaweed-tip stip8" style="transform-origin:1240px 130px">
+              <path d="M1236,130 C1234,109 1237,100 1240,92 C1243,100 1246,109 1244,130 Z" fill="url(#bladeGradLight)"/>
+            </g>
+          </g>
+        </g>
+        <g class="seaweed-root">
+          <g class="seaweed sw9" style="transform-origin:1280px 160px">
+            <path d="M1274,160 C1272,144 1285,136 1275,126 L1285,126 C1287,136 1283,144 1286,160 Z" fill="url(#bladeGradDark)"/>
+            <g class="seaweed-tip stip9" style="transform-origin:1280px 126px">
+              <path d="M1275,126 C1273,103 1277,92 1280,84 C1283,92 1287,103 1285,126 Z" fill="url(#bladeGradDark)"/>
+            </g>
+          </g>
+        </g>
+        <g class="seaweed-root">
+          <g class="seaweed sw10" style="transform-origin:1390px 160px">
+            <path d="M1385,160 C1383,150 1394,142 1386,132 L1394,132 C1396,142 1392,150 1395,160 Z" fill="url(#bladeGradLight)"/>
+            <g class="seaweed-tip stip10" style="transform-origin:1390px 132px">
+              <path d="M1386,132 C1384,112 1387,103 1390,96 C1393,103 1396,112 1394,132 Z" fill="url(#bladeGradLight)"/>
+            </g>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Peces animados -->
+    <div class="hero-fish-layer" aria-hidden="true">
+      <svg width="0" height="0" style="position:absolute">
+        <defs>
+          <radialGradient id="fishVolBlack" cx="35%" cy="30%" r="75%">
+            <stop offset="0%" stop-color="#4a4a4a"/>
+            <stop offset="55%" stop-color="#1a1a1a"/>
+            <stop offset="100%" stop-color="#000000"/>
+          </radialGradient>
+          <radialGradient id="fishVolPink" cx="35%" cy="30%" r="75%">
+            <stop offset="0%" stop-color="#ea96ab"/>
+            <stop offset="55%" stop-color="#d4607a"/>
+            <stop offset="100%" stop-color="#a8425a"/>
+          </radialGradient>
+          <radialGradient id="fishVolBlue" cx="35%" cy="30%" r="75%">
+            <stop offset="0%" stop-color="#a8d6e6"/>
+            <stop offset="55%" stop-color="#7bb8cc"/>
+            <stop offset="100%" stop-color="#5290a6"/>
+          </radialGradient>
+          <radialGradient id="fishVolRose" cx="35%" cy="30%" r="75%">
+            <stop offset="0%" stop-color="#f2aebb"/>
+            <stop offset="55%" stop-color="#e8899a"/>
+            <stop offset="100%" stop-color="#c25e72"/>
+          </radialGradient>
+        </defs>
+      </svg>
+
+      <!-- Pez único reutilizado: cola de doble luna, cuerpo redondo, ojo ovalado -->
+      <!-- Pez 1: negro grande izq→der -->
+      <svg class="anim-fish f1" viewBox="0 0 125 120" xmlns="http://www.w3.org/2000/svg">
+        <g><path d="M41.26,64.8 C38.16,52.4 27,36.9 2.2,29.46 C12.12,41.86 19.56,54.26 20.8,64.8Z" fill="#1a1a1a" opacity=".30"/>
+        <path d="M41.26,64.8 C38.16,77.2 27,92.7 2.2,100.14 C12.12,87.74 19.56,75.34 20.8,64.8Z" fill="#1a1a1a" opacity=".30"/>
+        <animateTransform attributeName="transform" type="rotate" values="0 41 65;8 41 65;0 41 65;-8 41 65;0 41 65" keyTimes="0;0.25;0.5;0.75;1" dur="0.45s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"/></g>
+        <path d="M41.26,64.8 C41.26,44.34 58,27.6 76.6,27.6 C92.72,27.6 105.74,43.1 116.9,64.8 C105.74,86.5 92.72,102 76.6,102 C58,102 41.26,85.26 41.26,64.8Z" fill="url(#fishVolBlack)" opacity=".28"/>
+        <path d="M62.96,30.7 C56.76,19.54 42.5,14.58 28.24,18.3 C38.16,25.74 50.56,31.94 59.24,39.38Z" fill="#1a1a1a" opacity=".28"/>
+        <path d="M65.44,98.9 C61.1,110.06 50.56,116.26 39.4,113.78 C48.7,107.58 56.76,102 61.1,95.18Z" fill="#1a1a1a" opacity=".28"/>
+        <path d="M77.84,99.52 C75.36,110.06 66.06,116.88 55.52,115.02 C62.96,108.82 69.78,103.24 73.5,97.04Z" fill="#1a1a1a" opacity=".28"/>
+        <ellipse cx="98.3" cy="60.46" rx="5" ry="7" fill="white" opacity=".82"/>
+      </svg>
+      <!-- Pez 2: rosa mediano der→izq -->
+      <svg class="anim-fish f2" viewBox="0 0 125 120" xmlns="http://www.w3.org/2000/svg">
+        <g><path d="M41.26,64.8 C38.16,52.4 27,36.9 2.2,29.46 C12.12,41.86 19.56,54.26 20.8,64.8Z" fill="#d4607a" opacity=".28"/>
+        <path d="M41.26,64.8 C38.16,77.2 27,92.7 2.2,100.14 C12.12,87.74 19.56,75.34 20.8,64.8Z" fill="#d4607a" opacity=".28"/>
+        <animateTransform attributeName="transform" type="rotate" values="0 41 65;9 41 65;0 41 65;-9 41 65;0 41 65" keyTimes="0;0.25;0.5;0.75;1" dur="0.52s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"/></g>
+        <path d="M41.26,64.8 C41.26,44.34 58,27.6 76.6,27.6 C92.72,27.6 105.74,43.1 116.9,64.8 C105.74,86.5 92.72,102 76.6,102 C58,102 41.26,85.26 41.26,64.8Z" fill="url(#fishVolPink)" opacity=".25"/>
+        <path d="M62.96,30.7 C56.76,19.54 42.5,14.58 28.24,18.3 C38.16,25.74 50.56,31.94 59.24,39.38Z" fill="#d4607a" opacity=".25"/>
+        <path d="M65.44,98.9 C61.1,110.06 50.56,116.26 39.4,113.78 C48.7,107.58 56.76,102 61.1,95.18Z" fill="#d4607a" opacity=".25"/>
+        <path d="M77.84,99.52 C75.36,110.06 66.06,116.88 55.52,115.02 C62.96,108.82 69.78,103.24 73.5,97.04Z" fill="#d4607a" opacity=".25"/>
+        <ellipse cx="98.3" cy="60.46" rx="5" ry="7" fill="white" opacity=".70"/>
+      </svg>
+      <!-- Pez 3: negro pequeño izq→der arriba -->
+      <svg class="anim-fish f3" viewBox="0 0 125 120" xmlns="http://www.w3.org/2000/svg">
+        <g><path d="M41.26,64.8 C38.16,52.4 27,36.9 2.2,29.46 C12.12,41.86 19.56,54.26 20.8,64.8Z" fill="#1a1a1a" opacity=".20"/>
+        <path d="M41.26,64.8 C38.16,77.2 27,92.7 2.2,100.14 C12.12,87.74 19.56,75.34 20.8,64.8Z" fill="#1a1a1a" opacity=".20"/>
+        <animateTransform attributeName="transform" type="rotate" values="0 41 65;7 41 65;0 41 65;-7 41 65;0 41 65" keyTimes="0;0.25;0.5;0.75;1" dur="0.40s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"/></g>
+        <path d="M41.26,64.8 C41.26,44.34 58,27.6 76.6,27.6 C92.72,27.6 105.74,43.1 116.9,64.8 C105.74,86.5 92.72,102 76.6,102 C58,102 41.26,85.26 41.26,64.8Z" fill="url(#fishVolBlack)" opacity=".18"/>
+        <path d="M62.96,30.7 C56.76,19.54 42.5,14.58 28.24,18.3 C38.16,25.74 50.56,31.94 59.24,39.38Z" fill="#1a1a1a" opacity=".18"/>
+        <path d="M65.44,98.9 C61.1,110.06 50.56,116.26 39.4,113.78 C48.7,107.58 56.76,102 61.1,95.18Z" fill="#1a1a1a" opacity=".18"/>
+        <path d="M77.84,99.52 C75.36,110.06 66.06,116.88 55.52,115.02 C62.96,108.82 69.78,103.24 73.5,97.04Z" fill="#1a1a1a" opacity=".18"/>
+      </svg>
+      <!-- Pez 4: azul-teal mediano-grande der→izq -->
+      <svg class="anim-fish f4" viewBox="0 0 125 120" xmlns="http://www.w3.org/2000/svg">
+        <g><path d="M41.26,64.8 C38.16,52.4 27,36.9 2.2,29.46 C12.12,41.86 19.56,54.26 20.8,64.8Z" fill="#7bb8cc" opacity=".30"/>
+        <path d="M41.26,64.8 C38.16,77.2 27,92.7 2.2,100.14 C12.12,87.74 19.56,75.34 20.8,64.8Z" fill="#7bb8cc" opacity=".30"/>
+        <animateTransform attributeName="transform" type="rotate" values="0 41 65;8 41 65;0 41 65;-8 41 65;0 41 65" keyTimes="0;0.25;0.5;0.75;1" dur="0.48s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"/></g>
+        <path d="M41.26,64.8 C41.26,44.34 58,27.6 76.6,27.6 C92.72,27.6 105.74,43.1 116.9,64.8 C105.74,86.5 92.72,102 76.6,102 C58,102 41.26,85.26 41.26,64.8Z" fill="url(#fishVolBlue)" opacity=".27"/>
+        <path d="M62.96,30.7 C56.76,19.54 42.5,14.58 28.24,18.3 C38.16,25.74 50.56,31.94 59.24,39.38Z" fill="#7bb8cc" opacity=".27"/>
+        <path d="M65.44,98.9 C61.1,110.06 50.56,116.26 39.4,113.78 C48.7,107.58 56.76,102 61.1,95.18Z" fill="#7bb8cc" opacity=".27"/>
+        <path d="M77.84,99.52 C75.36,110.06 66.06,116.88 55.52,115.02 C62.96,108.82 69.78,103.24 73.5,97.04Z" fill="#7bb8cc" opacity=".27"/>
+        <ellipse cx="98.3" cy="60.46" rx="5" ry="7" fill="white" opacity=".70"/>
+      </svg>
+      <!-- Pez 5: tiny negro izq→der muy arriba -->
+      <svg class="anim-fish f5" viewBox="0 0 125 120" xmlns="http://www.w3.org/2000/svg">
+        <g><path d="M41.26,64.8 C38.16,52.4 27,36.9 2.2,29.46 C12.12,41.86 19.56,54.26 20.8,64.8Z" fill="#1a1a1a" opacity=".16"/>
+        <path d="M41.26,64.8 C38.16,77.2 27,92.7 2.2,100.14 C12.12,87.74 19.56,75.34 20.8,64.8Z" fill="#1a1a1a" opacity=".16"/>
+        <animateTransform attributeName="transform" type="rotate" values="0 41 65;9 41 65;0 41 65;-9 41 65;0 41 65" keyTimes="0;0.25;0.5;0.75;1" dur="0.38s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"/></g>
+        <path d="M41.26,64.8 C41.26,44.34 58,27.6 76.6,27.6 C92.72,27.6 105.74,43.1 116.9,64.8 C105.74,86.5 92.72,102 76.6,102 C58,102 41.26,85.26 41.26,64.8Z" fill="url(#fishVolBlack)" opacity=".14"/>
+        <path d="M62.96,30.7 C56.76,19.54 42.5,14.58 28.24,18.3 C38.16,25.74 50.56,31.94 59.24,39.38Z" fill="#1a1a1a" opacity=".14"/>
+        <path d="M65.44,98.9 C61.1,110.06 50.56,116.26 39.4,113.78 C48.7,107.58 56.76,102 61.1,95.18Z" fill="#1a1a1a" opacity=".14"/>
+        <path d="M77.84,99.52 C75.36,110.06 66.06,116.88 55.52,115.02 C62.96,108.82 69.78,103.24 73.5,97.04Z" fill="#1a1a1a" opacity=".14"/>
+      </svg>
+      <!-- Pez 6: rosa pequeño der→izq abajo -->
+      <svg class="anim-fish f6" viewBox="0 0 125 120" xmlns="http://www.w3.org/2000/svg">
+        <g><path d="M41.26,64.8 C38.16,52.4 27,36.9 2.2,29.46 C12.12,41.86 19.56,54.26 20.8,64.8Z" fill="#e8899a" opacity=".24"/>
+        <path d="M41.26,64.8 C38.16,77.2 27,92.7 2.2,100.14 C12.12,87.74 19.56,75.34 20.8,64.8Z" fill="#e8899a" opacity=".24"/>
+        <animateTransform attributeName="transform" type="rotate" values="0 41 65;7 41 65;0 41 65;-7 41 65;0 41 65" keyTimes="0;0.25;0.5;0.75;1" dur="0.55s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"/></g>
+        <path d="M41.26,64.8 C41.26,44.34 58,27.6 76.6,27.6 C92.72,27.6 105.74,43.1 116.9,64.8 C105.74,86.5 92.72,102 76.6,102 C58,102 41.26,85.26 41.26,64.8Z" fill="url(#fishVolRose)" opacity=".21"/>
+        <path d="M62.96,30.7 C56.76,19.54 42.5,14.58 28.24,18.3 C38.16,25.74 50.56,31.94 59.24,39.38Z" fill="#e8899a" opacity=".21"/>
+        <path d="M65.44,98.9 C61.1,110.06 50.56,116.26 39.4,113.78 C48.7,107.58 56.76,102 61.1,95.18Z" fill="#e8899a" opacity=".21"/>
+        <path d="M77.84,99.52 C75.36,110.06 66.06,116.88 55.52,115.02 C62.96,108.82 69.78,103.24 73.5,97.04Z" fill="#e8899a" opacity=".21"/>
+      </svg>
+      <!-- Pez 7: negro grande izq→der abajo -->
+      <svg class="anim-fish f7" viewBox="0 0 125 120" xmlns="http://www.w3.org/2000/svg">
+        <g><path d="M41.26,64.8 C38.16,52.4 27,36.9 2.2,29.46 C12.12,41.86 19.56,54.26 20.8,64.8Z" fill="#1a1a1a" opacity=".26"/>
+        <path d="M41.26,64.8 C38.16,77.2 27,92.7 2.2,100.14 C12.12,87.74 19.56,75.34 20.8,64.8Z" fill="#1a1a1a" opacity=".26"/>
+        <animateTransform attributeName="transform" type="rotate" values="0 41 65;8 41 65;0 41 65;-8 41 65;0 41 65" keyTimes="0;0.25;0.5;0.75;1" dur="0.43s" repeatCount="indefinite" calcMode="spline" keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"/></g>
+        <path d="M41.26,64.8 C41.26,44.34 58,27.6 76.6,27.6 C92.72,27.6 105.74,43.1 116.9,64.8 C105.74,86.5 92.72,102 76.6,102 C58,102 41.26,85.26 41.26,64.8Z" fill="url(#fishVolBlack)" opacity=".23"/>
+        <path d="M62.96,30.7 C56.76,19.54 42.5,14.58 28.24,18.3 C38.16,25.74 50.56,31.94 59.24,39.38Z" fill="#1a1a1a" opacity=".23"/>
+        <path d="M65.44,98.9 C61.1,110.06 50.56,116.26 39.4,113.78 C48.7,107.58 56.76,102 61.1,95.18Z" fill="#1a1a1a" opacity=".23"/>
+        <path d="M77.84,99.52 C75.36,110.06 66.06,116.88 55.52,115.02 C62.96,108.82 69.78,103.24 73.5,97.04Z" fill="#1a1a1a" opacity=".23"/>
+        <ellipse cx="98.3" cy="60.46" rx="5" ry="7" fill="white" opacity=".70"/>
+      </svg>
+      <!-- Burbujas -->
+      <span class="bubble b1"></span>
+      <span class="bubble b2"></span>
+      <span class="bubble b3"></span>
+      <span class="bubble b4"></span>
+      <span class="bubble b5"></span>
+      <span class="bubble b6"></span>
+      <span class="bubble b7"></span>
+      <span class="bubble b8"></span>
+      <span class="bubble b9"></span>
+      <span class="bubble b10"></span>
+      <span class="bubble b11"></span>
+      <span class="bubble b12"></span>
+      <span class="bubble b13"></span>
+      <span class="bubble b14"></span>
+      <span class="bubble b15"></span>
+      <span class="bubble b16"></span>
+      <span class="bubble pop b17"></span>
+      <span class="bubble b18"></span>
+      <span class="bubble pop b19"></span>
+      <span class="bubble b20"></span>
+      <span class="bubble pop b21"></span>
+      <span class="bubble b22"></span>
+      <span class="bubble pop b23"></span>
+      <span class="bubble b24"></span>
+      <span class="bubble pop b25"></span>
+      <span class="bubble b26"></span>
+      <span class="bubble pop b27"></span>
+      <span class="bubble b28"></span>
+    </div>
+
     <div class="hero-deco">
       <span class="deco-el">🐚</span>
       <span class="deco-el">🌺</span>
-      <span class="deco-el">⭐</span>
+      <span class="deco-el">🤍</span>
       <span class="deco-el">🐠</span>
+      <span class="deco-el">✨</span>
+    </div>
+    <div class="hero-badge-strip">
+      <span data-fr="✋ Fait main" data-es="✋ Hecho a mano">✋ Fait main</span>
+      <span class="sep">·</span>
+      <span data-fr="🌊 Inspiré des tropiques" data-es="🌊 Inspirado en los trópicos">🌊 Inspiré des tropiques</span>
+      <span class="sep">·</span>
+      <span data-fr="💌 Livraison France & Espagne" data-es="💌 Envío Francia y España">💌 Livraison France & Espagne</span>
+    </div>
+  </section>
+
+  <!-- VALUES -->
+  <section class="values-section">
+    <div class="container">
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-icon">🎨</div>
+          <h3 data-fr="Créations uniques" data-es="Creaciones únicas">Créations uniques</h3>
+          <p data-fr="Chaque pièce est peinte à la main, une par une. Aucune n'est identique à une autre." data-es="Cada pieza está pintada a mano, una por una. Ninguna es igual a otra.">Chaque pièce est peinte à la main, une par une. Aucune n'est identique à une autre.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">💕</div>
+          <h3 data-fr="Fait avec amour" data-es="Hecho con amor">Fait avec amour</h3>
+          <p data-fr="L'amour est notre matière première. On le verse dans chaque trait, chaque couleur, chaque création." data-es="El amor es nuestra materia prima. Lo vertemos en cada trazo, cada color, cada creación.">L'amour est notre matière première. On le verse dans chaque trait, chaque couleur, chaque création.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🌿</div>
+          <h3 data-fr="Artisanat durable" data-es="Artesanía sostenible">Artisanat durable</h3>
+          <p data-fr="Des matériaux soigneusement choisis, des petites séries pour éviter le gaspillage. La qualité avant tout." data-es="Materiales cuidadosamente elegidos, pequeñas series para evitar el desperdicio. La calidad ante todo.">Des matériaux soigneusement choisis, des petites séries pour éviter le gaspillage. La qualité avant tout.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">✨</div>
+          <h3 data-fr="Sur mesure" data-es="A medida">Sur mesure</h3>
+          <p data-fr="Tu rêves d'un design ? On le crée pour toi. Chaque commande personnalisée est une nouvelle aventure." data-es="¿Sueñas con un diseño? Lo creamos para ti. Cada pedido personalizado es una nueva aventura.">Tu rêves d'un design ? On le crée pour toi. Chaque commande personnalisée est une nouvelle aventure.</p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -101,7 +419,17 @@
   <section class="about-section">
     <div class="container about-inner">
       <div class="about-img-wrap">
-        <div class="about-fish">🐟</div>
+        <div class="about-fish">
+          <svg viewBox="0 0 125 120" xmlns="http://www.w3.org/2000/svg">
+            <path d="M41.26,64.8 C38.16,52.4 27,36.9 2.2,29.46 C12.12,41.86 19.56,54.26 20.8,64.8Z" fill="#1a1a1a"/>
+            <path d="M41.26,64.8 C38.16,77.2 27,92.7 2.2,100.14 C12.12,87.74 19.56,75.34 20.8,64.8Z" fill="#1a1a1a"/>
+            <path d="M41.26,64.8 C41.26,44.34 58,27.6 76.6,27.6 C92.72,27.6 105.74,43.1 116.9,64.8 C105.74,86.5 92.72,102 76.6,102 C58,102 41.26,85.26 41.26,64.8Z" fill="url(#fishVolBlack)"/>
+            <path d="M62.96,30.7 C56.76,19.54 42.5,14.58 28.24,18.3 C38.16,25.74 50.56,31.94 59.24,39.38Z" fill="#1a1a1a"/>
+            <path d="M65.44,98.9 C61.1,110.06 50.56,116.26 39.4,113.78 C48.7,107.58 56.76,102 61.1,95.18Z" fill="#1a1a1a"/>
+            <path d="M77.84,99.52 C75.36,110.06 66.06,116.88 55.52,115.02 C62.96,108.82 69.78,103.24 73.5,97.04Z" fill="#1a1a1a"/>
+            <ellipse cx="98.3" cy="60.46" rx="5" ry="7" fill="white"/>
+          </svg>
+        </div>
       </div>
       <div class="about-text">
         <p class="section-label" data-fr="À propos" data-es="Sobre mí">À propos</p>
@@ -122,7 +450,7 @@
       <h2 data-fr="Une question ? Un design personnalisé ?" data-es="¿Una pregunta? ¿Un diseño personalizado?">Une question ? Un design personnalisé ?</h2>
       <p data-fr="Écris-nous sur Instagram ou WhatsApp — on adore les commandes sur mesure 🌸" data-es="Escríbenos en Instagram o WhatsApp — adoramos los pedidos personalizados 🌸">Écris-nous sur Instagram ou WhatsApp — on adore les commandes sur mesure 🌸</p>
       <div class="contact-btns">
-        <a href="https://wa.me/34XXXXXXXXX" class="btn-primary" id="wa-contact">
+        <a href="https://wa.me/33621839919" class="btn-primary" id="wa-contact">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           WhatsApp
         </a>
@@ -134,9 +462,13 @@
   <!-- FOOTER -->
   <footer class="footer">
     <div class="container footer-inner">
-      <img src="assets/logo.png" alt="Tropea Boutique" class="footer-logo"/>
+      <img src="assets/logo.svg" alt="Tropea Boutique" class="footer-logo"/>
       <p>© 2026 Tropea Boutique · Marseille 🐟</p>
-      <div class="footer-links">
+      <div class="footer-links" style="display:flex;gap:16px;flex-wrap:wrap">
+        <a href="blog/index.html">Blog</a>
+        <a href="contacto.html">Contact</a>
+        <a href="privacidad.html">Confidentialité</a>
+        <a href="terminos.html">Conditions</a>
         <a href="https://www.instagram.com/tropeaboutique" target="_blank">Instagram</a>
       </div>
     </div>

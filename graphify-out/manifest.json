@@ -1,0 +1,142 @@
+{
+  ".claude/launch.json": {
+    "mtime": 1781988734.5344882,
+    "ast_hash": "ab3196f67066ec331490af49191d2ce3",
+    "semantic_hash": ""
+  },
+  ".claude/settings.json": {
+    "mtime": 1781858940.6833754,
+    "ast_hash": "e1073342e958ac9f00716938c8f165e3",
+    "semantic_hash": "e1073342e958ac9f00716938c8f165e3"
+  },
+  ".claude/settings.local.json": {
+    "mtime": 1782048063.5272694,
+    "ast_hash": "2da7d961bb1116a0851ce40856e1a626",
+    "semantic_hash": ""
+  },
+  "admin/api.php": {
+    "mtime": 1782048077.4999301,
+    "ast_hash": "a598603f9775a5043df8d67804c0a32c",
+    "semantic_hash": ""
+  },
+  "admin/auth.php": {
+    "mtime": 1781549560.2470129,
+    "ast_hash": "bea8f189292f3094afff617523de867a",
+    "semantic_hash": "bea8f189292f3094afff617523de867a"
+  },
+  "admin/config.php": {
+    "mtime": 1782039605.7521145,
+    "ast_hash": "98132815eeed7e8bd4ca68c158ba7074",
+    "semantic_hash": ""
+  },
+  "admin/dashboard.php": {
+    "mtime": 1781550482.4678233,
+    "ast_hash": "581c55208ca493e6dea978a52de06ebc",
+    "semantic_hash": "581c55208ca493e6dea978a52de06ebc"
+  },
+  "admin/data/messages.json": {
+    "mtime": 1781549748.1112998,
+    "ast_hash": "58e0494c51d30eb3494f7c9198986bb9",
+    "semantic_hash": "58e0494c51d30eb3494f7c9198986bb9"
+  },
+  "admin/index.php": {
+    "mtime": 1781549612.3865144,
+    "ast_hash": "d07e49d20c0bdc0cf939dbdfcaa9a1b7",
+    "semantic_hash": "d07e49d20c0bdc0cf939dbdfcaa9a1b7"
+  },
+  "admin/logout.php": {
+    "mtime": 1781549722.7264786,
+    "ast_hash": "6eb64cc3e1c03f60286a2a60a6ee13c5",
+    "semantic_hash": "6eb64cc3e1c03f60286a2a60a6ee13c5"
+  },
+  "api/config.php": {
+    "mtime": 1781874891.7145374,
+    "ast_hash": "5951c6a02a115766ab217b72125f7794",
+    "semantic_hash": ""
+  },
+  "api/save_message.php": {
+    "mtime": 1781549732.5462322,
+    "ast_hash": "292d79493a8735353fbd4909a7959c86",
+    "semantic_hash": "292d79493a8735353fbd4909a7959c86"
+  },
+  "api/telegram.php": {
+    "mtime": 1781469134.780857,
+    "ast_hash": "03de93bfa051aa34768a7ffb78c046ed",
+    "semantic_hash": "03de93bfa051aa34768a7ffb78c046ed"
+  },
+  "app.js": {
+    "mtime": 1781469097.654379,
+    "ast_hash": "5874f75f252930c1a0180c60b092e7d0",
+    "semantic_hash": "5874f75f252930c1a0180c60b092e7d0"
+  },
+  "products.json": {
+    "mtime": 1781469090.1703212,
+    "ast_hash": "58e0494c51d30eb3494f7c9198986bb9",
+    "semantic_hash": "58e0494c51d30eb3494f7c9198986bb9"
+  },
+  "CLAUDE.md": {
+    "mtime": 1781858940.6831634,
+    "ast_hash": "82efb97a359f5c7290bf2513d14686be",
+    "semantic_hash": "82efb97a359f5c7290bf2513d14686be"
+  },
+  "blog/coques-telephone-faites-main-marseille.html": {
+    "mtime": 1781466716.268026,
+    "ast_hash": "9e15e60bbc406560a44ec0f45d295cc1",
+    "semantic_hash": "9e15e60bbc406560a44ec0f45d295cc1"
+  },
+  "blog/idee-cadeau-unique.html": {
+    "mtime": 1781466814.1365833,
+    "ast_hash": "04bad609f16992f2c2aa1dbe50b90623",
+    "semantic_hash": "04bad609f16992f2c2aa1dbe50b90623"
+  },
+  "blog/index.html": {
+    "mtime": 1781504739.996879,
+    "ast_hash": "1181e8ebd907b14b2f524c15d1a68f78",
+    "semantic_hash": "1181e8ebd907b14b2f524c15d1a68f78"
+  },
+  "blog/tote-bag-peint-main.html": {
+    "mtime": 1781466766.224494,
+    "ast_hash": "9394dbd8790f8e86c1c32d540b6c9d0b",
+    "semantic_hash": "9394dbd8790f8e86c1c32d540b6c9d0b"
+  },
+  "contacto.html": {
+    "mtime": 1781549743.449574,
+    "ast_hash": "d22d76e9b40be9556cce4f94ba6c2219",
+    "semantic_hash": "d22d76e9b40be9556cce4f94ba6c2219"
+  },
+  "index.html": {
+    "mtime": 1781674364.4011803,
+    "ast_hash": "b33d841c762e3ccb627292f6cfbacfe0",
+    "semantic_hash": "b33d841c762e3ccb627292f6cfbacfe0"
+  },
+  "privacidad.html": {
+    "mtime": 1781466571.5247622,
+    "ast_hash": "b62cd74739b41640f948424aa5733cf4",
+    "semantic_hash": "b62cd74739b41640f948424aa5733cf4"
+  },
+  "terminos.html": {
+    "mtime": 1781466601.5776567,
+    "ast_hash": "2b07ffaddca85cef65a1ab3848842c2e",
+    "semantic_hash": "2b07ffaddca85cef65a1ab3848842c2e"
+  },
+  "assets/logo.svg": {
+    "mtime": 1781672903.3635423,
+    "ast_hash": "a0744122a2ca2c9caef7e9d0fc6518cc",
+    "semantic_hash": "a0744122a2ca2c9caef7e9d0fc6518cc"
+  },
+  "assets/og.png": {
+    "mtime": 1781672979.5016878,
+    "ast_hash": "aa3dc9ee72686c5a95970388098e4d0a",
+    "semantic_hash": "aa3dc9ee72686c5a95970388098e4d0a"
+  },
+  "assets/og.svg": {
+    "mtime": 1781648831.9061418,
+    "ast_hash": "96a0123645c90f4061bea348990ecff3",
+    "semantic_hash": "96a0123645c90f4061bea348990ecff3"
+  },
+  "env.php": {
+    "mtime": 1781874854.9198017,
+    "ast_hash": "049d29c00b2fc73acb0ed72e89f5014d",
+    "semantic_hash": ""
+  }
+}

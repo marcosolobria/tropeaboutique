@@ -6,6 +6,12 @@
       "runtimeExecutable": "python3",
       "runtimeArgs": ["-m", "http.server", "4321", "--directory", "/Users/joseantoniomarcojerez/Projects/tropeaboutique"],
       "port": 4321
+    },
+    {
+      "name": "iberycard-fundadores",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "4568", "--directory", "/Users/joseantoniomarcojerez/Projects/iberycard-es/dist/iberycard-es/browser"],
+      "port": 4568
     }
   ]
 }

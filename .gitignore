@@ -1,2 +1,7 @@
 .vercel
 .env
+
+# Credenciales locales de Claude Code: este fichero puede contener contraseñas,
+# tokens y claves de API. Hoy lo tapa un .gitignore global del equipo, pero eso
+# NO viaja con el repositorio: en otro ordenador un `git add -A` lo subiría.
+.claude/settings.local.json

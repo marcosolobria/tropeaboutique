@@ -5,3 +5,10 @@
 # tokens y claves de API. Hoy lo tapa un .gitignore global del equipo, pero eso
 # NO viaja con el repositorio: en otro ordenador un `git add -A` lo subiría.
 .claude/settings.local.json
+
+# Cualquier variante de fichero de entorno, no solo `.env` exacto.
+# La rotación de julio dejó copias como `.env.bak-20260720` que las reglas
+# antiguas NO cubrían: habrían entrado con un `git add -A`.
+.env*
+!.env.example
+!.env.template

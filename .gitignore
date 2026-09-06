@@ -12,3 +12,6 @@
 .env*
 !.env.example
 !.env.template
+
+# Mensajes de clientes: nombre, email y texto. Este repo es PÚBLICO.
+admin/data/messages.json

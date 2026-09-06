@@ -7,6 +7,11 @@ Options -Indexes
   Require all denied
 </FilesMatch>
 
+# El loader de entorno no se sirve nunca como página suelta.
+<Files "env.php">
+  Require all denied
+</Files>
+
 RewriteEngine On
 
 # www → sin www (para LiteSpeed)

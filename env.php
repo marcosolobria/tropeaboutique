@@ -19,5 +19,8 @@ function load_env(string $path): void {
     }
 }
 
+// En el servidor el .env vive FUERA de public_html, donde la web no puede
+// alcanzarlo ni aunque el .htaccess falle. En local está junto a este fichero.
+load_env(dirname(__DIR__) . '/.env');
 load_env(__DIR__ . '/.env');
 ?>

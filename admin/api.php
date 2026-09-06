@@ -334,6 +334,18 @@ SYSTEM;
     $slug = strtolower(preg_replace('/[^a-z0-9]+/i', '-', iconv('UTF-8','ASCII//TRANSLIT',$title)));
     $slug = trim($slug, '-') ?: 'post-' . time();
     $file = $slug . '.html';
+
+    // date('F Y') escribe el mes en inglés, y esto es una web en francés.
+    $meses = [1=>'Janvier','Février','Mars','Avril','Mai','Juin',
+              'Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+    $fecha = $meses[(int) date('n')] . ' ' . date('Y');
+
+    // La entradilla alimenta el buscador y la ficha del listado.
+    $resumen = trim(preg_replace('/\s+/', ' ', strip_tags($body)));
+    if (mb_strlen($resumen) > 155) { $resumen = mb_substr($resumen, 0, 152) . '…'; }
+    $resumen = htmlspecialchars($resumen, ENT_QUOTES, 'UTF-8');
+    $tituloEsc = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
+
     $html = <<<HTML
 <!DOCTYPE html>
 <html lang="fr">
@@ -341,6 +353,12 @@ SYSTEM;
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>{$title} — Tropea Boutique</title>
+  <meta name="description" content="{$resumen}"/>
+  <link rel="canonical" href="https://tropeaboutique.com/blog/{$file}"/>
+  <meta property="og:title" content="{$tituloEsc}"/>
+  <meta property="og:description" content="{$resumen}"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:url" content="https://tropeaboutique.com/blog/{$file}"/>
   <link rel="icon" href="../assets/logo.svg" type="image/svg+xml"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
@@ -359,19 +377,26 @@ SYSTEM;
     <a href="/" class="nav-logo"><img src="../assets/logo.svg" alt="Tropea Boutique" class="nav-logo-img"/></a>
     <div class="nav-center-links">
       <a href="/" class="nav-link">Boutique</a>
-      <a href="index.html" class="nav-link">Journal</a>
+      <a href="../sobre-mi.html" class="nav-link">Qui suis-je</a>
+      <a href="./" class="nav-link">Journal</a>
       <a href="../contacto.html" class="nav-link">Contact</a>
     </div>
   </nav>
   <div class="post-wrap">
     <span class="hero-label" style="display:block;margin-bottom:18px">{$tag}</span>
     <h1>{$title}</h1>
-    <p class="post-meta">{$tag} · ✍️ Tropea Boutique · {date('F Y')}</p>
+    <p class="post-meta">{$tag} · ✍️ Maria Yañez · {$fecha}</p>
     <div class="post-body">{$body}</div>
   </div>
   <footer class="footer"><div class="container footer-inner">
     <img src="../assets/logo.svg" alt="Tropea Boutique" class="footer-logo"/>
     <p>© 2026 Tropea Boutique · Marseille 🐟</p>
+    <div class="footer-links" style="display:flex;gap:16px;flex-wrap:wrap">
+      <a href="/">Boutique</a>
+      <a href="./">Journal</a>
+      <a href="../contacto.html">Contact</a>
+      <a href="mailto:info@tropeaboutique.com">info@tropeaboutique.com</a>
+    </div>
   </div></footer>
 </body>
 </html>

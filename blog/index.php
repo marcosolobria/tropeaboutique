@@ -1,3 +1,74 @@
+<?php
+// El listado del Journal se genera leyendo la carpeta. Antes estaba escrito a
+// mano: los artículos que Maria creaba desde el panel se guardaban aquí pero no
+// aparecían en ninguna parte, así que no los encontraba nadie.
+
+function trozo(string $html, string $patron): string {
+    return preg_match($patron, $html, $m) ? trim(html_entity_decode(strip_tags($m[1]), ENT_QUOTES, 'UTF-8')) : '';
+}
+
+$MESES = [1=>'Janvier','Février','Mars','Avril','Mai','Juin',
+          'Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+
+$posts = [];
+foreach (glob(__DIR__ . '/*.html') as $ruta) {
+    $fichero = basename($ruta);
+    if ($fichero === 'index.html') continue;
+    $html = file_get_contents($ruta);
+
+    $titulo = trozo($html, '~<h1[^>]*>(.*?)</h1>~s') ?: trozo($html, '~<title>(.*?)(?:\s*—.*?)?</title>~s');
+    if ($titulo === '') continue;
+
+    // La etiqueta puede venir del artículo del panel (hero-label) o del manual.
+    $tag = trozo($html, '~class="hero-label"[^>]*>(.*?)</span>~s')
+        ?: trozo($html, '~class="(?:article-tag|blog-tag|featured-label)"[^>]*>(.*?)</span>~s')
+        ?: 'Journal';
+
+    // Entradilla: la meta description si la hay; si no, el primer párrafo real.
+    $extracto = trozo($html, '~<meta name="description" content="([^"]*)"~');
+    if ($extracto === '') {
+        preg_match_all('~<p(?![^>]*class="(?:article-meta|post-meta)")[^>]*>(.*?)</p>~s', $html, $ms);
+        $extracto = isset($ms[1][0]) ? trim(html_entity_decode(strip_tags($ms[1][0]), ENT_QUOTES, 'UTF-8')) : '';
+    }
+    if (mb_strlen($extracto) > 170) $extracto = mb_substr($extracto, 0, 167) . '…';
+
+    // Fecha: la que trae escrita el artículo manda sobre la del fichero. Ordenar
+    // por filemtime a secas es una trampa: volver a desplegar un artículo viejo
+    // lo pondría de portada.
+    $texto = trozo($html, '~class="(?:article-meta|post-meta)"[^>]*>(.*?)</p>~s');
+    $clave = 0;
+    if (preg_match('~(' . implode('|', $MESES) . ')\s+(\d{4})~ui', $texto, $m)) {
+        $mes   = array_search(ucfirst(mb_strtolower($m[1])), $MESES, true) ?: 1;
+        $fecha = ucfirst(mb_strtolower($m[1])) . ' ' . $m[2];
+        $clave = ((int) $m[2]) * 100 + $mes;
+    } else {
+        $fecha = $MESES[(int) date('n', filemtime($ruta))] . ' ' . date('Y', filemtime($ruta));
+        $clave = ((int) date('Y', filemtime($ruta))) * 100 + (int) date('n', filemtime($ruta));
+    }
+
+    $posts[] = [
+        'file' => $fichero, 'titulo' => $titulo, 'tag' => $tag,
+        'extracto' => $extracto, 'fecha' => $fecha,
+        'clave' => $clave, 'orden' => filemtime($ruta),
+    ];
+}
+
+// El más reciente arriba, y de portada.
+// Por mes de publicación; dentro del mismo mes, lo último escrito arriba.
+usort($posts, fn($a, $b) => [$b['clave'], $b['orden']] <=> [$a['clave'], $a['orden']]);
+
+$EMOJIS  = ['🐚','🌺','🎁','🌊','✨','🎨','💌','🌴','🪸','🦋'];
+$FONDOS  = ['bg-rose','bg-sand','bg-mint','bg-sky'];
+$destacado = array_shift($posts);
+$categorias = [];
+foreach (array_merge($destacado ? [$destacado] : [], $posts) as $p) {
+    foreach (array_map('trim', explode('·', $p['tag'])) as $c) {
+        if ($c !== '') $categorias[$c] = true;
+    }
+}
+$categorias = array_slice(array_keys($categorias), 0, 6);
+function e($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -100,7 +171,7 @@
     <div class="nav-center-links">
       <a href="/" class="nav-link">Boutique</a>
       <a href="../sobre-mi.html" class="nav-link">Qui suis-je</a>
-      <a href="index.html" class="nav-link" style="color:var(--black);font-weight:600">Journal</a>
+      <a href="./" class="nav-link" style="color:var(--black);font-weight:600">Journal</a>
       <a href="../contacto.html" class="nav-link">Contact</a>
     </div>
     <div class="nav-right">
@@ -119,90 +190,48 @@
 
   <!-- CATEGORIES -->
   <div class="blog-categories">
-    <button class="cat-pill active">Tout</button>
-    <button class="cat-pill">Création</button>
-    <button class="cat-pill">Coulisses</button>
-    <button class="cat-pill">Idées cadeaux</button>
-    <button class="cat-pill">Inspiration</button>
+    <button class="cat-pill active" data-cat="*">Tout</button>
+<?php foreach ($categorias as $c): ?>
+    <button class="cat-pill" data-cat="<?= e($c) ?>"><?= e($c) ?></button>
+<?php endforeach; ?>
   </div>
 
+<?php if ($destacado): ?>
   <!-- FEATURED -->
   <div class="blog-featured">
-    <a class="featured-card" href="coques-telephone-faites-main-marseille.html">
-      <div class="featured-img">🐚</div>
+    <a class="featured-card" href="<?= e($destacado['file']) ?>" data-tag="<?= e($destacado['tag']) ?>">
+      <div class="featured-img"><?= $EMOJIS[crc32($destacado['file']) % count($EMOJIS)] ?></div>
       <div class="featured-body">
-        <span class="featured-label">À la une · Création & Artisanat</span>
-        <h2>Comment naît une coque Tropea ? De la coque vierge à la pièce unique</h2>
-        <p>Un pinceau, de la peinture, beaucoup d'amour — et une pièce qui ne ressemblera à aucune autre. Découvrez notre processus de création, étape par étape, depuis l'inspiration jusqu'à l'emballage avec soin.</p>
-        <div class="featured-meta">
-          <span>Juin 2026</span>
-          <span>·</span>
-          <span>5 min de lecture</span>
-        </div>
+        <span class="featured-label">À la une · <?= e($destacado['tag']) ?></span>
+        <h2><?= e($destacado['titulo']) ?></h2>
+        <p><?= e($destacado['extracto']) ?></p>
+        <div class="featured-meta"><span><?= e($destacado['fecha']) ?></span></div>
         <span class="read-btn">Lire l'article →</span>
       </div>
     </a>
   </div>
+<?php endif; ?>
 
+<?php if ($posts): ?>
   <!-- AUTRES ARTICLES -->
   <p class="blog-section-title">Autres histoires</p>
   <div class="blog-grid">
-    <a class="blog-card" href="tote-bag-peint-main.html">
-      <div class="blog-card-img bg-rose">🌺</div>
+<?php foreach ($posts as $i => $p): ?>
+    <a class="blog-card" href="<?= e($p['file']) ?>" data-tag="<?= e($p['tag']) ?>">
+      <div class="blog-card-img <?= $FONDOS[$i % count($FONDOS)] ?>"><?= $EMOJIS[crc32($p['file']) % count($EMOJIS)] ?></div>
       <div class="blog-card-body">
-        <span class="blog-tag">Tote Bags · Peinture</span>
-        <h2>Tote bag peint à la main : beauté, amour et éco-responsabilité</h2>
-        <p>Pourquoi choisir un tote bag artisanal ? Entre mode, durabilité et unicité, on vous dit tout sur cet accessoire qui porte une histoire.</p>
+        <span class="blog-tag"><?= e($p['tag']) ?></span>
+        <h2><?= e($p['titulo']) ?></h2>
+        <p><?= e($p['extracto']) ?></p>
         <div class="blog-card-footer">
-          <span class="blog-date">Mai 2026</span>
+          <span class="blog-date"><?= e($p['fecha']) ?></span>
           <span class="read-more">Lire →</span>
         </div>
       </div>
     </a>
-    <a class="blog-card" href="idee-cadeau-unique.html">
-      <div class="blog-card-img bg-sand">🎁</div>
-      <div class="blog-card-body">
-        <span class="blog-tag">Idées cadeaux</span>
-        <h2>5 cadeaux faits main qui disent « je t'aime » mieux que les mots</h2>
-        <p>Des cadeaux qui sortent de l'ordinaire et viennent du cœur — parce que le plus beau cadeau, c'est celui qu'on a choisi avec amour.</p>
-        <div class="blog-card-footer">
-          <span class="blog-date">Avril 2026</span>
-          <span class="read-more">Lire →</span>
-        </div>
-      </div>
-    </a>
-    <a class="blog-card" href="#">
-      <div class="blog-card-img bg-mint">🌊</div>
-      <div class="blog-card-body">
-        <span class="blog-tag">Inspiration · Marseille</span>
-        <h2>Marseille, la mer et les couleurs qui nous inspirent chaque jour</h2>
-        <p>La lumière du Vieux-Port au lever du soleil, le bleu profond de la Méditerranée… Marseille est notre muse silencieuse.</p>
-        <div class="blog-card-footer">
-          <span class="blog-date">Mars 2026</span>
-          <span class="read-more">Lire →</span>
-        </div>
-      </div>
-    </a>
-    <a class="blog-card" href="#">
-      <div class="blog-card-img bg-sky">✨</div>
-      <div class="blog-card-body">
-        <span class="blog-tag">Coulisses</span>
-        <h2>Dans les coulisses de Tropea : une journée de création</h2>
-        <p>Du café du matin aux derniers coups de pinceau du soir — venez vivre avec nous une journée de création artisanale.</p>
-        <div class="blog-card-footer">
-          <span class="blog-date">Février 2026</span>
-          <span class="read-more">Lire →</span>
-        </div>
-      </div>
-    </a>
+<?php endforeach; ?>
   </div>
-
-  <!-- CTA -->
-  <div class="blog-cta">
-    <h2>Une pièce qui vous ressemble ?</h2>
-    <p>Chaque commande personnalisée est une nouvelle histoire d'amour à écrire ensemble.</p>
-    <a href="../contacto.html" class="btn-primary">Créer ma pièce unique</a>
-  </div>
+<?php endif; ?>
 
   <!-- FOOTER -->
   <footer class="footer">
@@ -211,18 +240,28 @@
       <p>© 2026 Tropea Boutique · Marseille 🐟</p>
       <div class="footer-links" style="display:flex;gap:16px;flex-wrap:wrap">
         <a href="/">Boutique</a>
+        <a href="../sobre-mi.html">Qui suis-je</a>
         <a href="../contacto.html">Contact</a>
         <a href="../privacidad.html">Confidentialité</a>
         <a href="../terminos.html">Conditions</a>
+        <a href="mailto:info@tropeaboutique.com">info@tropeaboutique.com</a>
       </div>
     </div>
   </footer>
 
   <script>
+    // Las pastillas filtran de verdad; antes solo se coloreaban.
     document.querySelectorAll('.cat-pill').forEach(pill => {
       pill.addEventListener('click', () => {
         document.querySelectorAll('.cat-pill').forEach(p => p.classList.remove('active'));
         pill.classList.add('active');
+        const cat = pill.dataset.cat;
+        document.querySelectorAll('[data-tag]').forEach(card => {
+          const visible = cat === '*' || card.dataset.tag.includes(cat);
+          card.closest('.blog-featured, .blog-card') === null
+            ? card.style.display = visible ? '' : 'none'
+            : card.style.display = visible ? '' : 'none';
+        });
       });
     });
   </script>

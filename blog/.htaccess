@@ -1,0 +1,6 @@
+# El listado se genera con PHP, así que index.php manda sobre index.html.
+DirectoryIndex index.php index.html
+
+RewriteEngine On
+# El listado antiguo era /blog/index.html; se conserva el enlace redirigiendo.
+RewriteRule ^index\.html$ /blog/ [R=301,L]

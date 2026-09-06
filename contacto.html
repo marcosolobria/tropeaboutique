@@ -8,7 +8,7 @@
   <link rel="icon" href="assets/logo.svg" type="image/svg+xml"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css?v=20260906d"/>
+  <link rel="stylesheet" href="style.css?v=20260906e"/>
   <style>
     /* ---- Contact page ---- */
     .cpage-hero {
@@ -98,6 +98,13 @@
       <a href="contacto.html" class="nav-link" style="color:var(--black);font-weight:600">Contact</a>
     </div>
     <div class="nav-right">
+      <div class="nav-langs">
+        <button class="lang-btn" data-lang="fr">FR</button>
+        <span class="lang-sep">|</span>
+        <button class="lang-btn" data-lang="es">ES</button>
+        <span class="lang-sep">|</span>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
       <a href="https://www.instagram.com/tropeaboutique" target="_blank" class="nav-ig">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
       </a>
@@ -106,8 +113,8 @@
 
   <!-- HERO -->
   <div class="cpage-hero">
-    <span class="hero-label">Contact</span>
-    <h1>Créons quelque chose<br/><em>d'unique ensemble</em></h1>
+    <span class="hero-label" data-fr="Contact" data-es="Contacto" data-en="Contact">Contact</span>
+    <h1 data-fr="Créons quelque chose<br/><em>d&#39;unique ensemble</em>" data-es="Creemos algo <br/><em>único, juntos</em>" data-en="Let&#39;s make something<br/><em>unique together</em>">Créons quelque chose<br/><em>d'unique ensemble</em></h1>
     <p data-fr="Chaque pièce est une histoire d'amour. Dis-nous la tienne et on la dessine pour toi." data-es="Cada pieza es una historia de amor. Cuéntanos la tuya y la dibujamos para ti.">Chaque pièce est une histoire d'amour. Dis-nous la tienne et on la dessine pour toi.</p>
   </div>
 
@@ -116,8 +123,8 @@
 
     <!-- Left: channels + quote -->
     <div class="cpage-channels">
-      <span class="cpage-section-label">Nous trouver</span>
-      <h2 class="cpage-title">Parlons-nous</h2>
+      <span class="cpage-section-label" data-fr="Nous trouver" data-es="Dónde encontrarnos" data-en="Find us">Nous trouver</span>
+      <h2 class="cpage-title" data-fr="Parlons-nous" data-es="Hablemos" data-en="Let&#39;s talk">Parlons-nous</h2>
 
       <a class="channel-card" href="https://wa.me/33621839919?text=Bonjour%20Tropea%20!%20Je%20voudrais%20une%20pi%C3%A8ce%20personnalis%C3%A9e." target="_blank">
         <div class="channel-icon icon-wa">
@@ -125,7 +132,7 @@
         </div>
         <div class="channel-info">
           <h3>WhatsApp</h3>
-          <p>+33 6 21 83 99 19 · Réponse rapide</p>
+          <p data-fr="+33 6 21 83 99 19 · Réponse rapide" data-es="+33 6 21 83 99 19 · Respuesta rápida" data-en="+33 6 21 83 99 19 · Quick reply">+33 6 21 83 99 19 · Réponse rapide</p>
         </div>
         <span class="channel-arrow">→</span>
       </a>
@@ -136,7 +143,7 @@
         </div>
         <div class="channel-info">
           <h3>Instagram</h3>
-          <p>@tropeaboutique · DM ouvert</p>
+          <p data-fr="@tropeaboutique · DM ouvert" data-es="@tropeaboutique · DM abierto" data-en="@tropeaboutique · DMs open">@tropeaboutique · DM ouvert</p>
         </div>
         <span class="channel-arrow">→</span>
       </a>
@@ -160,12 +167,12 @@
 
     <!-- Right: form -->
     <div class="cpage-form-wrap">
-      <span class="cpage-section-label">Message</span>
-      <h2 class="cpage-title">Envoie-nous ton idée</h2>
+      <span class="cpage-section-label" data-fr="Message" data-es="Mensaje" data-en="Message">Message</span>
+      <h2 class="cpage-title" data-fr="Envoie-nous ton idée" data-es="Cuéntanos tu idea" data-en="Send us your idea">Envoie-nous ton idée</h2>
       <form id="contact-form" novalidate>
         <div class="form-row">
           <div class="form-group">
-            <label for="cf-name">Prénom / Nombre</label>
+            <label for="cf-name" data-fr="Prénom" data-es="Nombre" data-en="First name">Prénom / Nombre</label>
             <input type="text" id="cf-name" placeholder="Sophie" required/>
           </div>
           <div class="form-group">
@@ -174,25 +181,25 @@
           </div>
         </div>
         <div class="form-group">
-          <label for="cf-type">Type de demande</label>
+          <label for="cf-type" data-fr="Type de demande" data-es="Tipo de consulta" data-en="What is it about?">Type de demande</label>
           <select id="cf-type">
-            <option value="">Choisir…</option>
-            <option>Commande personnalisée</option>
-            <option>Question sur un produit</option>
-            <option>Suivi de commande</option>
-            <option>Autre</option>
+            <option value="" data-fr="Choisir…" data-es="Elegir…" data-en="Choose…">Choisir…</option>
+            <option data-fr="Commande personnalisée" data-es="Pedido personalizado" data-en="Custom order">Commande personnalisée</option>
+            <option data-fr="Question sur un produit" data-es="Duda sobre un producto" data-en="Question about a product">Question sur un produit</option>
+            <option data-fr="Suivi de commande" data-es="Seguimiento de pedido" data-en="Order tracking">Suivi de commande</option>
+            <option data-fr="Autre" data-es="Otro" data-en="Something else">Autre</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="cf-msg">Ton message ✨</label>
-          <textarea id="cf-msg" placeholder="Raconte-nous ton idée, le modèle de téléphone, les couleurs… on adore les détails !" required></textarea>
+          <label for="cf-msg" data-fr="Ton message ✨" data-es="Tu mensaje ✨" data-en="Your message ✨">Ton message ✨</label>
+          <textarea id="cf-msg" placeholder="Raconte-nous ton idée, le modèle de téléphone, les couleurs… on adore les détails !" data-fr="Raconte-nous ton idée, le modèle de téléphone, les couleurs… on adore les détails !" data-es="Cuéntanos tu idea, el modelo de móvil, los colores… nos encantan los detalles." data-en="Tell us your idea, your phone model, the colours… we love the details!" required></textarea>
         </div>
         <!-- Trampa para bots: invisible y fuera del recorrido del teclado.
              Si llega rellenado, el servidor descarta el mensaje. -->
         <input type="text" id="cf-website" name="website" tabindex="-1" autocomplete="off"
                aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px"/>
-        <button type="submit" class="btn-primary form-submit">Envoyer mon message 💌</button>
-        <p class="form-note">On répond dans les 24h. Pour les urgences, WhatsApp est plus rapide !</p>
+        <button type="submit" class="btn-primary form-submit" data-fr="Envoyer mon message 💌" data-es="Enviar mi mensaje 💌" data-en="Send my message 💌">Envoyer mon message 💌</button>
+        <p class="form-note" data-fr="On répond dans les 24h. Pour les urgences, WhatsApp est plus rapide !" data-es="Respondemos en 24 h. Si corre prisa, WhatsApp es más rápido." data-en="We reply within 24h. If it is urgent, WhatsApp is faster!">On répond dans les 24h. Pour les urgences, WhatsApp est plus rapide !</p>
         <div class="form-success" id="form-success">
           ✅ Message envoyé ! On te répond très vite avec beaucoup d'amour 🌸
         </div>
@@ -203,23 +210,23 @@
 
   <!-- FAQ -->
   <div class="cpage-faq">
-    <h2>Questions fréquentes</h2>
+    <h2 data-fr="Questions fréquentes" data-es="Preguntas frecuentes" data-en="Frequently asked questions">Questions fréquentes</h2>
     <div class="faq-grid">
       <div class="faq-card">
-        <p class="faq-q"><span class="faq-ico">🎨</span> Puis-je commander une pièce unique ?</p>
-        <p class="faq-a">Oui, c'est même ce qu'on préfère ! Contacte-nous avec ton idée et on crée quelque chose de totalement unique pour toi. ¡Sí, es lo que más nos gusta!</p>
+        <p class="faq-q" data-fr="<span class=&quot;faq-ico&quot;>🎨</span> Puis-je commander une pièce unique ?" data-es="<span class=&quot;faq-ico&quot;>🎨</span> ¿Puedo encargar una pieza única?" data-en="<span class=&quot;faq-ico&quot;>🎨</span> Can I order a one-off piece?"><span class="faq-ico">🎨</span> Puis-je commander une pièce unique ?</p>
+        <p class="faq-a" data-fr="Oui, c&#39;est même ce qu&#39;on préfère ! Contacte-nous avec ton idée et on crée quelque chose de totalement unique pour toi." data-es="Sí, y además es lo que más nos gusta. Escríbenos con tu idea y creamos algo totalmente único para ti." data-en="Yes — and it is what we enjoy most. Send us your idea and we will create something entirely yours.">Oui, c&#39;est même ce qu&#39;on préfère ! Contacte-nous avec ton idée et on crée quelque chose de totalement unique pour toi.</p>
       </div>
       <div class="faq-card">
-        <p class="faq-q"><span class="faq-ico">📦</span> Délais de livraison ?</p>
-        <p class="faq-a">France : 5–7 jours ouvrés. Espagne : 7–10 jours. Pièces personnalisées : ajouter 3–5 jours de création. Francia: 5–7 días. España: 7–10 días.</p>
+        <p class="faq-q" data-fr="<span class=&quot;faq-ico&quot;>📦</span> Délais de livraison ?" data-es="<span class=&quot;faq-ico&quot;>📦</span> ¿Plazos de envío?" data-en="<span class=&quot;faq-ico&quot;>📦</span> Delivery times?"><span class="faq-ico">📦</span> Délais de livraison ?</p>
+        <p class="faq-a" data-fr="France : 5–7 jours ouvrés. Espagne : 7–10 jours. Pièces personnalisées : ajouter 3–5 jours de création." data-es="Francia: 5–7 días laborables. España: 7–10 días. Las piezas personalizadas suman 3–5 días de creación." data-en="France: 5–7 working days. Spain: 7–10 days. Custom pieces need 3–5 days more to make.">France : 5–7 jours ouvrés. Espagne : 7–10 jours. Pièces personnalisées : ajouter 3–5 jours de création.</p>
       </div>
       <div class="faq-card">
-        <p class="faq-q"><span class="faq-ico">💳</span> Modes de paiement</p>
-        <p class="faq-a">Virement, Bizum ou PayPal. Un acompte de 50% est demandé pour les commandes personnalisées. Transferencia, Bizum o PayPal. Anticipo del 50%.</p>
+        <p class="faq-q" data-fr="<span class=&quot;faq-ico&quot;>💳</span> Modes de paiement" data-es="<span class=&quot;faq-ico&quot;>💳</span> Formas de pago" data-en="<span class=&quot;faq-ico&quot;>💳</span> Payment methods"><span class="faq-ico">💳</span> Modes de paiement</p>
+        <p class="faq-a" data-fr="Virement, Bizum ou PayPal. Un acompte de 50% est demandé pour les commandes personnalisées." data-es="Transferencia, Bizum o PayPal. En los pedidos personalizados se pide un anticipo del 50%." data-en="Bank transfer, Bizum or PayPal. Custom orders require a 50% deposit.">Virement, Bizum ou PayPal. Un acompte de 50% est demandé pour les commandes personnalisées.</p>
       </div>
       <div class="faq-card">
-        <p class="faq-q"><span class="faq-ico">📱</span> Modèles de téléphone disponibles ?</p>
-        <p class="faq-a">iPhone et Samsung principalement. Contacte-nous avec ton modèle exact et on vérifie ! Principalmente iPhone y Samsung. ¡Pregúntanos tu modelo!</p>
+        <p class="faq-q" data-fr="<span class=&quot;faq-ico&quot;>📱</span> Modèles de téléphone disponibles ?" data-es="<span class=&quot;faq-ico&quot;>📱</span> ¿Qué modelos de móvil?" data-en="<span class=&quot;faq-ico&quot;>📱</span> Which phone models?"><span class="faq-ico">📱</span> Modèles de téléphone disponibles ?</p>
+        <p class="faq-a" data-fr="iPhone et Samsung principalement. Contacte-nous avec ton modèle exact et on vérifie !" data-es="Sobre todo iPhone y Samsung. Escríbenos con tu modelo exacto y lo comprobamos." data-en="Mostly iPhone and Samsung. Send us your exact model and we will check.">iPhone et Samsung principalement. Contacte-nous avec ton modèle exact et on vérifie !</p>
       </div>
     </div>
   </div>
@@ -240,10 +247,8 @@
     </div>
   </footer>
 
+  <script src="lang.js?v=20260906e"></script>
   <script>
-    const lang = navigator.language.startsWith('es') ? 'es' : 'fr';
-    if (lang === 'es') document.querySelectorAll('[data-es]').forEach(el => { el.textContent = el.dataset.es; });
-
     document.getElementById('contact-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       const name  = document.getElementById('cf-name').value.trim();

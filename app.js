@@ -63,6 +63,7 @@ const DEMO_PRODUCTS = [
 ];
 
 /* ===== STATE ===== */
+// El idioma vive en lang.js, compartido por todas las páginas.
 let lang = 'fr';
 let currentCollection = 'all';
 let products = [];
@@ -77,27 +78,14 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ===== LANGUAGE ===== */
+// Los botones y la traducción de los textos los lleva lang.js. Aquí solo hace
+// falta repintar los productos cuando el idioma cambia.
 function initLang() {
-  document.querySelectorAll('.lang-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      lang = btn.dataset.lang;
-      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      applyLang();
-    });
+  lang = window.TropeaLang ? window.TropeaLang.actual : 'fr';
+  document.addEventListener('tropea:lang', e => {
+    lang = e.detail;
+    renderProducts();
   });
-}
-
-function applyLang() {
-  document.querySelectorAll('[data-fr]').forEach(el => {
-    const text = el.dataset[lang] || el.dataset.fr;
-    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-      el.placeholder = text;
-    } else {
-      el.innerHTML = text;
-    }
-  });
-  renderProducts();
 }
 
 /* ===== PRODUCTS ===== */
@@ -122,6 +110,8 @@ function normalizeProduct(p) {
     image_url: imageUrlFrom(p),
     description_fr: p.description_fr || p.desc_fr || p.description || '',
     description_es: p.description_es || p.desc_es || p.description || '',
+    description_en: p.description_en || p.desc_en || '',
+    name_en: p.name_en || '',
   });
 }
 
@@ -173,9 +163,11 @@ function renderProducts() {
   if (!filtered.length) {
     grid.innerHTML = '';
     empty.style.display = 'block';
-    empty.textContent = lang === 'fr'
-      ? 'Aucun article dans cette collection pour le moment.'
-      : 'No hay artículos en esta colección por ahora.';
+    empty.textContent = {
+      fr: 'Aucun article dans cette collection pour le moment.',
+      es: 'No hay artículos en esta colección por ahora.',
+      en: 'No items in this collection right now.',
+    }[lang];
     return;
   }
   empty.style.display = 'none';
@@ -185,8 +177,13 @@ function renderProducts() {
   });
 }
 
+// Sin traducción para el idioma activo se cae al francés, que es el original.
+function nombreDe(p) {
+  return p[`name_${lang}`] || p.name_fr || p.name || '';
+}
+
 function cardHTML(p) {
-  const name = lang === 'fr' ? (p.name_fr || p.name) : (p.name_es || p.name);
+  const name = nombreDe(p);
   const price = `${p.price}${p.currency || '€'}`;
   return `
     <article class="product-card">
@@ -213,17 +210,19 @@ function initModal() {
 }
 
 function openModal(p) {
-  const name = lang === 'fr' ? (p.name_fr || p.name) : (p.name_es || p.name);
-  const desc = lang === 'fr' ? p.description_fr : (p.description_es || p.description_fr);
+  const name = nombreDe(p);
+  const desc = p[`description_${lang}`] || p.description_fr || '';
   document.getElementById('modal-img').src = p.image_url;
   document.getElementById('modal-img').alt = name;
   document.getElementById('modal-collection').textContent = p.collection || '';
   document.getElementById('modal-title').textContent = name;
   document.getElementById('modal-desc').textContent = desc || '';
   document.getElementById('modal-price').textContent = `${p.price}${p.currency || '€'}`;
-  const waText = lang === 'fr'
-    ? `Bonjour ! Je suis intéressé(e) par "${name}" (${p.price}€). Est-ce disponible ?`
-    : `¡Hola! Me interesa "${name}" (${p.price}€). ¿Está disponible?`;
+  const waText = {
+    fr: `Bonjour ! Je suis intéressé(e) par "${name}" (${p.price}€). Est-ce disponible ?`,
+    es: `¡Hola! Me interesa "${name}" (${p.price}€). ¿Está disponible?`,
+    en: `Hi! I'm interested in "${name}" (${p.price}€). Is it available?`,
+  }[lang];
   document.getElementById('modal-wa').href = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(waText)}`;
   document.getElementById('modal-overlay').classList.add('open');
   document.body.style.overflow = 'hidden';

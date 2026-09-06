@@ -79,7 +79,7 @@ function e($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
   <link rel="icon" href="../assets/logo.svg" type="image/svg+xml"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="../style.css?v=20260906d"/>
+  <link rel="stylesheet" href="../style.css?v=20260906e"/>
   <style>
     /* ---- Blog page styles ---- */
     .blog-page { background: var(--cream); min-height: 100vh; }
@@ -169,12 +169,19 @@ function e($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
   <nav class="nav">
     <a href="/" class="nav-logo"><img src="../assets/logo.svg" alt="Tropea Boutique" class="nav-logo-img"/></a>
     <div class="nav-center-links">
-      <a href="/" class="nav-link">Boutique</a>
-      <a href="../sobre-mi.html" class="nav-link">Qui suis-je</a>
-      <a href="./" class="nav-link" style="color:var(--black);font-weight:600">Journal</a>
-      <a href="../contacto.html" class="nav-link">Contact</a>
+      <a href="/" class="nav-link" data-fr="Boutique" data-es="Tienda" data-en="Shop">Boutique</a>
+      <a href="../sobre-mi.html" class="nav-link" data-fr="Qui suis-je" data-es="Sobre mí" data-en="About me">Qui suis-je</a>
+      <a href="./" class="nav-link" style="color:var(--black);font-weight:600" data-fr="Journal" data-es="Blog" data-en="Journal">Journal</a>
+      <a href="../contacto.html" class="nav-link" data-fr="Contact" data-es="Contacto" data-en="Contact">Contact</a>
     </div>
     <div class="nav-right">
+      <div class="nav-langs">
+        <button class="lang-btn" data-lang="fr">FR</button>
+        <span class="lang-sep">|</span>
+        <button class="lang-btn" data-lang="es">ES</button>
+        <span class="lang-sep">|</span>
+        <button class="lang-btn" data-lang="en">EN</button>
+      </div>
       <a href="https://www.instagram.com/tropeaboutique" target="_blank" class="nav-ig">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
       </a>
@@ -183,14 +190,14 @@ function e($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
 
   <!-- HERO -->
   <div class="blog-hero">
-    <span class="hero-label">Journal</span>
-    <h1>Nos histoires<br/><em>d'amour</em> artisanal</h1>
-    <p>Inspirations, coulisses de création et la poésie derrière chaque pièce faite main.</p>
+    <span class="hero-label" data-fr="Journal" data-es="Blog" data-en="Journal">Journal</span>
+    <h1 data-fr="Nos histoires<br/><em>d&#39;amour</em> artisanal" data-es="Nuestras historias<br/>de <em>amor</em> artesanal" data-en="Our handmade<br/><em>love</em> stories">Nos histoires<br/><em>d'amour</em> artisanal</h1>
+    <p data-fr="Inspirations, coulisses de création et la poésie derrière chaque pièce faite main." data-es="Inspiraciones, la trastienda del taller y la poesía que hay detrás de cada pieza hecha a mano." data-en="Inspiration, behind the scenes and the poetry behind every handmade piece.">Inspirations, coulisses de création et la poésie derrière chaque pièce faite main.</p>
   </div>
 
   <!-- CATEGORIES -->
   <div class="blog-categories">
-    <button class="cat-pill active" data-cat="*">Tout</button>
+    <button class="cat-pill active" data-cat="*" data-fr="Tout" data-es="Todo" data-en="All">Tout</button>
 <?php foreach ($categorias as $c): ?>
     <button class="cat-pill" data-cat="<?= e($c) ?>"><?= e($c) ?></button>
 <?php endforeach; ?>
@@ -206,7 +213,7 @@ function e($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
         <h2><?= e($destacado['titulo']) ?></h2>
         <p><?= e($destacado['extracto']) ?></p>
         <div class="featured-meta"><span><?= e($destacado['fecha']) ?></span></div>
-        <span class="read-btn">Lire l'article →</span>
+        <span class="read-btn" data-fr="Lire l&#39;article →" data-es="Leer el artículo →" data-en="Read the article →">Lire l'article →</span>
       </div>
     </a>
   </div>
@@ -214,7 +221,7 @@ function e($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
 
 <?php if ($posts): ?>
   <!-- AUTRES ARTICLES -->
-  <p class="blog-section-title">Autres histoires</p>
+  <p class="blog-section-title" data-fr="Autres histoires" data-es="Otras historias" data-en="More stories">Autres histoires</p>
   <div class="blog-grid">
 <?php foreach ($posts as $i => $p): ?>
     <a class="blog-card" href="<?= e($p['file']) ?>" data-tag="<?= e($p['tag']) ?>">
@@ -225,7 +232,7 @@ function e($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
         <p><?= e($p['extracto']) ?></p>
         <div class="blog-card-footer">
           <span class="blog-date"><?= e($p['fecha']) ?></span>
-          <span class="read-more">Lire →</span>
+          <span class="read-more" data-fr="Lire →" data-es="Leer →" data-en="Read →">Lire →</span>
         </div>
       </div>
     </a>
@@ -241,7 +248,7 @@ function e($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
       <div class="footer-links" style="display:flex;gap:16px;flex-wrap:wrap">
         <a href="/">Boutique</a>
         <a href="../sobre-mi.html">Qui suis-je</a>
-        <a href="../contacto.html">Contact</a>
+        <a href="../contacto.html" data-fr="Contact" data-es="Contacto" data-en="Contact">Contact</a>
         <a href="../privacidad.html">Confidentialité</a>
         <a href="../terminos.html">Conditions</a>
         <a href="mailto:info@tropeaboutique.com">info@tropeaboutique.com</a>
@@ -249,6 +256,7 @@ function e($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
     </div>
   </footer>
 
+  <script src="../lang.js?v=20260906e"></script>
   <script>
     // Las pastillas filtran de verdad; antes solo se coloreaban.
     document.querySelectorAll('.cat-pill').forEach(pill => {

@@ -5,6 +5,70 @@ requireAuth();
 header('Content-Type: application/json');
 $action = $_POST['action'] ?? $_GET['action'] ?? '';
 
+/**
+ * Una sola puerta hacia Gemini, para el chat y para el traductor.
+ *
+ * El plan gratuito devuelve "high demand" de vez en cuando, sin patrón: la
+ * misma petición falla y a los tres segundos funciona. Por eso reintenta, y si
+ * el modelo sigue saturado prueba con otro antes de rendirse.
+ */
+function llamarGemini(array $cuerpo): array {
+    $modelos = ['gemini-flash-latest', 'gemini-2.5-flash'];
+    $ultimo = 'No se pudo contactar con el modelo';
+
+    foreach ($modelos as $modelo) {
+        for ($intento = 1; $intento <= 2; $intento++) {
+            $ch = curl_init("https://generativelanguage.googleapis.com/v1beta/models/$modelo:generateContent");
+            curl_setopt_array($ch, [
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_POST => true,
+                CURLOPT_TIMEOUT => 300,
+                // La clave está restringida a la IPv4 del servidor, que también
+                // tiene IPv6: por ahí Google la rechazaría.
+                CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
+                CURLOPT_HTTPHEADER => [
+                    'Content-Type: application/json',
+                    // En cabecera y no en la URL, para que no acabe en los logs.
+                    'x-goog-api-key: ' . GEMINI_API_KEY,
+                ],
+                CURLOPT_POSTFIELDS => json_encode($cuerpo),
+            ]);
+            $res  = curl_exec($ch);
+            $err  = curl_error($ch);
+            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+
+            if ($err) { $ultimo = $err; continue; }
+            $data = json_decode($res, true);
+
+            if ($code === 200) {
+                $texto = '';
+                foreach ($data['candidates'][0]['content']['parts'] ?? [] as $part) {
+                    if (isset($part['text'])) { $texto .= $part['text']; }
+                }
+                if ($texto !== '') { return ['ok' => true, 'texto' => $texto]; }
+                $razon = $data['candidates'][0]['finishReason'] ?? '';
+                if ($razon === 'SAFETY')     { return ['ok' => false, 'error' => 'La petición se ha bloqueado por los filtros de seguridad. Prueba a reformularla.']; }
+                if ($razon === 'MAX_TOKENS') { return ['ok' => false, 'error' => 'La respuesta era demasiado larga. Pídelo por partes.']; }
+                $ultimo = 'Respuesta vacía del modelo';
+                continue;
+            }
+
+            $mensaje = $data['error']['message'] ?? "Error HTTP $code";
+            // Cuota agotada: reintentar no arregla nada, se dice y punto.
+            if ($code === 429) {
+                return ['ok' => false, 'error' => 'Se ha agotado la cuota gratuita por ahora. Prueba dentro de un minuto.'];
+            }
+            // Saturación o error del servidor: merece la pena reintentar.
+            $saturado = $code >= 500 || stripos($mensaje, 'high demand') !== false || stripos($mensaje, 'overloaded') !== false;
+            $ultimo = $mensaje;
+            if (!$saturado) { return ['ok' => false, 'error' => $mensaje]; }
+            sleep(2 * $intento);
+        }
+    }
+    return ['ok' => false, 'error' => 'Los modelos están saturados ahora mismo. Vuelve a intentarlo en un par de minutos. (' . $ultimo . ')'];
+}
+
 switch ($action) {
 
   // ── CHAT CON GEMINI (Google AI Studio, cuota gratuita) ─────
@@ -167,6 +231,7 @@ SYSTEM;
     }
 
     // Gemini llama "model" al turno del asistente, y el texto va en `parts`.
+    // Gemini llama "model" al turno del asistente, y el texto va en `parts`.
     $contents = array_values(array_map(function ($m) {
       return [
         'role' => $m['role'] === 'assistant' ? 'model' : 'user',
@@ -174,48 +239,13 @@ SYSTEM;
       ];
     }, $messages));
 
-    $ch = curl_init('https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent');
-    curl_setopt_array($ch, [
-      CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_POST => true,
-      CURLOPT_TIMEOUT => 180,
-      // Salir siempre por IPv4: la clave está restringida a la IP v4 del
-      // servidor, y por IPv6 Google la rechazaría.
-      CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
-      // La clave va en cabecera, no en la URL: así no acaba en los logs del servidor.
-      CURLOPT_HTTPHEADER => [
-        'Content-Type: application/json',
-        'x-goog-api-key: ' . GEMINI_API_KEY,
-      ],
-      CURLOPT_POSTFIELDS => json_encode([
-        'system_instruction' => ['parts' => [['text' => $system]]],
-        'contents' => $contents,
-        'generationConfig' => ['maxOutputTokens' => 8000],
-      ]),
+    $r = llamarGemini([
+      'system_instruction' => ['parts' => [['text' => $system]]],
+      'contents' => $contents,
+      'generationConfig' => ['maxOutputTokens' => 8000],
     ]);
-    $res = curl_exec($ch);
-    $err = curl_error($ch);
-    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-    if ($err) { echo json_encode(['error' => $err]); exit; }
-    $data = json_decode($res, true);
-    if ($code !== 200) {
-      $msg = $data['error']['message'] ?? "Error HTTP $code";
-      if ($code === 429) { $msg = 'Se ha agotado la cuota gratuita por ahora. Prueba en un minuto.'; }
-      echo json_encode(['error' => $msg]);
-      exit;
-    }
-    // La respuesta puede venir partida en varios `parts`: se juntan todos.
-    $text = '';
-    foreach ($data['candidates'][0]['content']['parts'] ?? [] as $part) {
-      if (isset($part['text'])) { $text .= $part['text']; }
-    }
-    if ($text === '') {
-      $reason = $data['candidates'][0]['finishReason'] ?? '';
-      if ($reason === 'SAFETY')          { $text = 'La petición se ha bloqueado por los filtros de seguridad. Prueba a reformularla.'; }
-      elseif ($reason === 'MAX_TOKENS')  { $text = 'La respuesta era demasiado larga. Pide el texto por partes.'; }
-      else                               { $text = 'Respuesta vacía del modelo'; }
-    }
+    if (!$r['ok']) { echo json_encode(['error' => $r['error']]); exit; }
+    $text = $r['texto'];
     echo json_encode(['reply' => $text]);
     break;
 
@@ -463,36 +493,15 @@ Reglas:
 - No añadas comentarios ni texto fuera del JSON.
 SYS;
 
-    $ch = curl_init('https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent');
-    curl_setopt_array($ch, [
-      CURLOPT_RETURNTRANSFER => true,
-      CURLOPT_POST => true,
-      CURLOPT_TIMEOUT => 300,
-      CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
-      CURLOPT_HTTPHEADER => ['Content-Type: application/json', 'x-goog-api-key: ' . GEMINI_API_KEY],
-      CURLOPT_POSTFIELDS => json_encode([
-        'system_instruction' => ['parts' => [['text' => $instruccion]]],
-        'contents' => [['role' => 'user', 'parts' => [['text' => implode("\n", $lista)]]]],
-        // Se pide JSON de verdad, no texto que parezca JSON.
-        'generationConfig' => ['maxOutputTokens' => 8000, 'responseMimeType' => 'application/json'],
-      ]),
+    $r = llamarGemini([
+      'system_instruction' => ['parts' => [['text' => $instruccion]]],
+      'contents' => [['role' => 'user', 'parts' => [['text' => implode("\n", $lista)]]]],
+      // Se pide JSON de verdad, no texto que parezca JSON.
+      'generationConfig' => ['maxOutputTokens' => 8000, 'responseMimeType' => 'application/json'],
     ]);
-    $res  = curl_exec($ch);
-    $err  = curl_error($ch);
-    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
-    if ($err) { echo json_encode(['error' => $err]); exit; }
-    $data = json_decode($res, true);
-    if ($code !== 200) {
-      $msg = $data['error']['message'] ?? "Error HTTP $code";
-      if ($code === 429) { $msg = 'Se ha agotado la cuota gratuita por ahora. Prueba en un minuto.'; }
-      echo json_encode(['error' => $msg]);
-      exit;
-    }
-    $bruto = '';
-    foreach ($data['candidates'][0]['content']['parts'] ?? [] as $part) {
-      if (isset($part['text'])) { $bruto .= $part['text']; }
-    }
+    if (!$r['ok']) { echo json_encode(['error' => $r['error']]); exit; }
+    $bruto = $r['texto'];
+
     $trad = json_decode($bruto, true);
     if (!is_array($trad)) {
       echo json_encode(['error' => 'La respuesta del traductor no era JSON válido. Vuelve a intentarlo.']);

@@ -15,3 +15,6 @@
 
 # Mensajes de clientes: nombre, email y texto. Este repo es PÚBLICO.
 admin/data/messages.json
+
+# Carpeta de trabajo temporal: guiones y datos sueltos, no forman parte de la web.
+.tmp/

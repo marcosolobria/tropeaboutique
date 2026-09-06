@@ -543,6 +543,23 @@ async function saveProducts() {
 }
 
 // ── BLOG ──────────────────────────────────────────────────────
+// Traduce el artículo al español y al inglés con la IA. El francés se queda
+// como está: solo se añaden las traducciones a cada bloque.
+async function traducirPost(file, boton) {
+  if (!confirm('¿Traducir este artículo al español y al inglés?\n\nEl texto en francés no se toca; se añaden las otras dos versiones. Se guarda una copia de seguridad antes.')) return;
+  const textoOriginal = boton.textContent;
+  boton.disabled = true;
+  boton.textContent = '⏳ Traduciendo…';
+  try {
+    const res = await api({action: 'translate_post', file});
+    alert(res.ok ? '✅ ' + res.mensaje : '❌ ' + (res.error || 'No se pudo traducir'));
+  } catch (e) {
+    alert('❌ No se pudo contactar con el servidor');
+  }
+  boton.disabled = false;
+  boton.textContent = textoOriginal;
+}
+
 async function loadBlogPosts() {
   const posts = await api({action:'get_blog_posts'});
   const el = document.getElementById('blog-list');
@@ -554,6 +571,7 @@ async function loadBlogPosts() {
     <div class="blog-list-item">
       <div><div class="blog-item-title">${escHtml(p.title)}</div><div class="blog-item-date">📅 ${p.modified}</div></div>
       <div class="blog-item-actions">
+        <button class="btn btn-ghost btn-sm" onclick="traducirPost('${p.file}', this)">🌍 Traducir</button>
         <a href="/blog/${p.file}" target="_blank" class="btn btn-ghost btn-sm" style="text-decoration:none">🔗 Ver</a>
       </div>
     </div>`).join('');

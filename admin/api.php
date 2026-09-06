@@ -179,6 +179,9 @@ SYSTEM;
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_POST => true,
       CURLOPT_TIMEOUT => 180,
+      // Salir siempre por IPv4: la clave está restringida a la IP v4 del
+      // servidor, y por IPv6 Google la rechazaría.
+      CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
       // La clave va en cabecera, no en la URL: así no acaba en los logs del servidor.
       CURLOPT_HTTPHEADER => [
         'Content-Type: application/json',
@@ -403,6 +406,126 @@ SYSTEM;
 HTML;
     file_put_contents(__DIR__ . '/../blog/' . $file, $html);
     echo json_encode(['ok' => true, 'file' => $file]);
+    break;
+
+  // ── TRADUCIR UN ARTÍCULO ─────────────────────────────────────
+  // Añade data-es y data-en a cada bloque de texto. El francés se queda como
+  // contenido visible: es el original y es lo que ve un buscador sin JavaScript.
+  case 'translate_post':
+    if (!GEMINI_API_KEY) {
+      echo json_encode(['error' => 'Falta GEMINI_API_KEY en el .env del servidor']);
+      exit;
+    }
+    $file = basename($_POST['file'] ?? '');
+    if (!preg_match('/^[\w\-]+\.html$/', $file) || $file === 'index.html') {
+      echo json_encode(['error' => 'Nombre de artículo inválido']);
+      exit;
+    }
+    $ruta = __DIR__ . '/../blog/' . $file;
+    if (!is_file($ruta)) { echo json_encode(['error' => 'No existe ese artículo']); exit; }
+
+    $html = file_get_contents($ruta);
+
+    // Solo se traduce lo que hay dentro del cuerpo del artículo.
+    if (!preg_match('~(<article[^>]*>|<div class="post-body">)(.*?)(</article>|</div>)~s', $html, $cuerpo)) {
+      echo json_encode(['error' => 'No encuentro el cuerpo del artículo']);
+      exit;
+    }
+
+    // Bloques traducibles, saltando la línea de autor y los que ya están hechos.
+    preg_match_all('~<(h1|h2|h3|p|li|span)([^>]*)>(.*?)</\1>~s', $cuerpo[2], $ms, PREG_SET_ORDER);
+    $pendientes = [];
+    foreach ($ms as $m) {
+      if (strpos($m[2], 'data-es=') !== false) continue;
+      if (strpos($m[2], 'article-meta') !== false || strpos($m[2], 'post-meta') !== false) continue;
+      $texto = trim(preg_replace('/\s+/', ' ', $m[3]));
+      if ($texto === '' || !preg_match('/\p{L}/u', strip_tags($texto))) continue;
+      $pendientes[] = ['entero' => $m[0], 'tag' => $m[1], 'attrs' => $m[2], 'texto' => $texto];
+    }
+
+    if (!$pendientes) {
+      echo json_encode(['ok' => true, 'traducidos' => 0, 'mensaje' => 'Ya estaba traducido entero.']);
+      exit;
+    }
+
+    $lista = [];
+    foreach ($pendientes as $i => $b) { $lista[] = "[$i] " . $b['texto']; }
+
+    $instruccion = <<<SYS
+Eres traductor de una tienda artesanal francesa, Tropea Boutique (Marsella): fundas de móvil y tote bags pintados a mano.
+Recibes bloques de texto en francés numerados. Devuelve SOLO un objeto JSON cuyas claves sean los números de bloque y cuyos valores sean {"es": "...", "en": "..."}.
+Reglas:
+- Traduce al español de España y al inglés natural, no literal. Es texto de marca: debe leerse bien, no sonar a traducción automática.
+- Mantén el tono cercano y cuidado del original, y los emojis si los hay.
+- Conserva TAL CUAL las etiquetas HTML que aparezcan dentro del texto (por ejemplo <em>, <br/>, <span ...>).
+- No traduzcas nombres propios: Tropea Boutique, Marseille/Marsella, Maria Yañez, iPhone, Samsung, Bizum, PayPal, WhatsApp, Instagram.
+- Los precios y cifras se quedan igual.
+- No añadas comentarios ni texto fuera del JSON.
+SYS;
+
+    $ch = curl_init('https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent');
+    curl_setopt_array($ch, [
+      CURLOPT_RETURNTRANSFER => true,
+      CURLOPT_POST => true,
+      CURLOPT_TIMEOUT => 300,
+      CURLOPT_IPRESOLVE => CURL_IPRESOLVE_V4,
+      CURLOPT_HTTPHEADER => ['Content-Type: application/json', 'x-goog-api-key: ' . GEMINI_API_KEY],
+      CURLOPT_POSTFIELDS => json_encode([
+        'system_instruction' => ['parts' => [['text' => $instruccion]]],
+        'contents' => [['role' => 'user', 'parts' => [['text' => implode("\n", $lista)]]]],
+        // Se pide JSON de verdad, no texto que parezca JSON.
+        'generationConfig' => ['maxOutputTokens' => 8000, 'responseMimeType' => 'application/json'],
+      ]),
+    ]);
+    $res  = curl_exec($ch);
+    $err  = curl_error($ch);
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    if ($err) { echo json_encode(['error' => $err]); exit; }
+    $data = json_decode($res, true);
+    if ($code !== 200) {
+      $msg = $data['error']['message'] ?? "Error HTTP $code";
+      if ($code === 429) { $msg = 'Se ha agotado la cuota gratuita por ahora. Prueba en un minuto.'; }
+      echo json_encode(['error' => $msg]);
+      exit;
+    }
+    $bruto = '';
+    foreach ($data['candidates'][0]['content']['parts'] ?? [] as $part) {
+      if (isset($part['text'])) { $bruto .= $part['text']; }
+    }
+    $trad = json_decode($bruto, true);
+    if (!is_array($trad)) {
+      echo json_encode(['error' => 'La respuesta del traductor no era JSON válido. Vuelve a intentarlo.']);
+      exit;
+    }
+
+    // Copia de seguridad FUERA de public_html: un .bak dentro sería descargable.
+    $copias = __DIR__ . '/../../backups-blog/';
+    if (!is_dir($copias)) { @mkdir($copias, 0700, true); }
+    @file_put_contents($copias . $file . '.' . date('Ymd-His') . '.bak', $html);
+
+    $puestos = 0;
+    foreach ($pendientes as $i => $b) {
+      $t = $trad[(string) $i] ?? $trad[$i] ?? null;
+      if (!isset($t['es'], $t['en'])) continue;
+      $attrs = ' data-fr="' . htmlspecialchars($b['texto'], ENT_QUOTES, 'UTF-8') . '"'
+             . ' data-es="' . htmlspecialchars($t['es'], ENT_QUOTES, 'UTF-8') . '"'
+             . ' data-en="' . htmlspecialchars($t['en'], ENT_QUOTES, 'UTF-8') . '"';
+      $nuevo = preg_replace('~^<' . $b['tag'] . preg_quote($b['attrs'], '~') . '>~',
+                            '<' . $b['tag'] . $b['attrs'] . $attrs . '>', $b['entero'], 1);
+      if ($nuevo === $b['entero']) continue;
+      $pos = strpos($html, $b['entero']);
+      if ($pos === false) continue;
+      $html = substr_replace($html, $nuevo, $pos, strlen($b['entero']));
+      $puestos++;
+    }
+
+    file_put_contents($ruta, $html);
+    echo json_encode([
+      'ok' => true,
+      'traducidos' => $puestos,
+      'mensaje' => "$puestos bloques traducidos al español y al inglés.",
+    ]);
     break;
 
   // ── MENSAJES ─────────────────────────────────────────────────

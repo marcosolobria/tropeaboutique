@@ -7,6 +7,45 @@ function trozo(string $html, string $patron): string {
     return preg_match($patron, $html, $m) ? trim(html_entity_decode(strip_tags($m[1]), ENT_QUOTES, 'UTF-8')) : '';
 }
 
+
+// Las categorías salen escritas en francés dentro de cada artículo. Traducirlas
+// aquí evita tocar los artículos, que se quedan en francés a propósito.
+const CATEGORIAS = [
+    'Inspiration'   => ['es' => 'Inspiración',    'en' => 'Inspiration'],
+    'Idées cadeaux' => ['es' => 'Ideas de regalo','en' => 'Gift ideas'],
+    'Création'      => ['es' => 'Creación',       'en' => 'Making'],
+    'Artisanat'     => ['es' => 'Artesanía',      'en' => 'Craft'],
+    'Coulisses'     => ['es' => 'Trastienda',     'en' => 'Behind the scenes'],
+    'Tote Bags'     => ['es' => 'Tote bags',      'en' => 'Tote bags'],
+    'Mode durable'  => ['es' => 'Moda sostenible','en' => 'Sustainable fashion'],
+    'Marseille'     => ['es' => 'Marsella',       'en' => 'Marseille'],
+    'Journal'       => ['es' => 'Blog',           'en' => 'Journal'],
+];
+
+// Una etiqueta puede ser compuesta ("Création · Artisanat"): se traduce trozo a
+// trozo, y lo que no esté en el diccionario se queda como está.
+function cat(string $tag, string $idioma): string {
+    if ($idioma === 'fr') return $tag;
+    $partes = array_map(function ($t) use ($idioma) {
+        $t = trim($t);
+        return CATEGORIAS[$t][$idioma] ?? $t;
+    }, explode('·', $tag));
+    return implode(' · ', $partes);
+}
+
+// Los tres idiomas de una etiqueta, listos para meter en data-fr/es/en.
+function attrsCat(string $tag, string $prefijo = ''): string {
+    $pref = ['fr' => $prefijo, 'es' => $prefijo, 'en' => $prefijo];
+    if ($prefijo !== '') {
+        $pref = ['fr' => 'À la une · ', 'es' => 'Destacado · ', 'en' => 'Featured · '];
+    }
+    $out = '';
+    foreach (['fr','es','en'] as $i) {
+        $out .= ' data-' . $i . '="' . htmlspecialchars($pref[$i] . cat($tag, $i), ENT_QUOTES, 'UTF-8') . '"';
+    }
+    return $out;
+}
+
 $MESES = [1=>'Janvier','Février','Mars','Avril','Mai','Juin',
           'Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
 
@@ -19,18 +58,32 @@ foreach (glob(__DIR__ . '/*.html') as $ruta) {
     $titulo = trozo($html, '~<h1[^>]*>(.*?)</h1>~s') ?: trozo($html, '~<title>(.*?)(?:\s*—.*?)?</title>~s');
     if ($titulo === '') continue;
 
+    // Los artículos traducidos llevan data-es y data-en en el <h1>: la ficha del
+    // listado debe enseñar el título en el idioma del lector, no siempre el
+    // francés. Sin traducción, se queda el francés.
+    $tituloES = trozo($html, '~<h1[^>]*\sdata-es="([^"]*)"~') ?: $titulo;
+    $tituloEN = trozo($html, '~<h1[^>]*\sdata-en="([^"]*)"~') ?: $titulo;
+
     // La etiqueta puede venir del artículo del panel (hero-label) o del manual.
     $tag = trozo($html, '~class="hero-label"[^>]*>(.*?)</span>~s')
         ?: trozo($html, '~class="(?:article-tag|blog-tag|featured-label)"[^>]*>(.*?)</span>~s')
         ?: 'Journal';
 
     // Entradilla: la meta description si la hay; si no, el primer párrafo real.
-    $extracto = trozo($html, '~<meta name="description" content="([^"]*)"~');
-    if ($extracto === '') {
-        preg_match_all('~<p(?![^>]*class="(?:article-meta|post-meta)")[^>]*>(.*?)</p>~s', $html, $ms);
-        $extracto = isset($ms[1][0]) ? trim(html_entity_decode(strip_tags($ms[1][0]), ENT_QUOTES, 'UTF-8')) : '';
+    // Entradilla: el primer párrafo de verdad, con sus traducciones si las tiene.
+    preg_match_all('~<p(?![^>]*class="(?:article-meta|post-meta)")([^>]*)>(.*?)</p>~s', $html, $ms, PREG_SET_ORDER);
+    $primero = $ms[0] ?? null;
+    $limpia = fn($t) => trim(html_entity_decode(strip_tags($t), ENT_QUOTES, 'UTF-8'));
+    $extracto = $primero ? $limpia($primero[2]) : trozo($html, '~<meta name="description" content="([^"]*)"~');
+    $extractoES = $extractoEN = $extracto;
+    if ($primero) {
+        if (preg_match('~\sdata-es="([^"]*)"~', $primero[1], $m)) $extractoES = $limpia($m[1]);
+        if (preg_match('~\sdata-en="([^"]*)"~', $primero[1], $m)) $extractoEN = $limpia($m[1]);
     }
-    if (mb_strlen($extracto) > 170) $extracto = mb_substr($extracto, 0, 167) . '…';
+    $corta = fn($t) => mb_strlen($t) > 170 ? mb_substr($t, 0, 167) . '…' : $t;
+    $extracto   = $corta($extracto);
+    $extractoES = $corta($extractoES);
+    $extractoEN = $corta($extractoEN);
 
     // Fecha: la que trae escrita el artículo manda sobre la del fichero. Ordenar
     // por filemtime a secas es una trampa: volver a desplegar un artículo viejo
@@ -48,6 +101,8 @@ foreach (glob(__DIR__ . '/*.html') as $ruta) {
 
     $posts[] = [
         'file' => $fichero, 'titulo' => $titulo, 'tag' => $tag,
+        'titulos' => ['fr' => $titulo, 'es' => $tituloES, 'en' => $tituloEN],
+        'extractos' => ['fr' => $extracto, 'es' => $extractoES, 'en' => $extractoEN],
         'extracto' => $extracto, 'fecha' => $fecha,
         'clave' => $clave, 'orden' => filemtime($ruta),
     ];
@@ -68,6 +123,13 @@ foreach (array_merge($destacado ? [$destacado] : [], $posts) as $p) {
 }
 $categorias = array_slice(array_keys($categorias), 0, 6);
 function e($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
+
+// Vuelca data-fr/es/en a partir de un array con los tres idiomas.
+function attrs3(array $v): string {
+    $out = '';
+    foreach (['fr','es','en'] as $i) { $out .= ' data-' . $i . '="' . e($v[$i]) . '"'; }
+    return $out;
+}
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -199,7 +261,7 @@ function e($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
   <div class="blog-categories">
     <button class="cat-pill active" data-cat="*" data-fr="Tout" data-es="Todo" data-en="All">Tout</button>
 <?php foreach ($categorias as $c): ?>
-    <button class="cat-pill" data-cat="<?= e($c) ?>"><?= e($c) ?></button>
+    <button class="cat-pill" data-cat="<?= e($c) ?>"<?= attrsCat($c) ?>><?= e($c) ?></button>
 <?php endforeach; ?>
   </div>
 
@@ -209,9 +271,9 @@ function e($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
     <a class="featured-card" href="<?= e($destacado['file']) ?>" data-tag="<?= e($destacado['tag']) ?>">
       <div class="featured-img"><?= $EMOJIS[crc32($destacado['file']) % count($EMOJIS)] ?></div>
       <div class="featured-body">
-        <span class="featured-label">À la une · <?= e($destacado['tag']) ?></span>
-        <h2><?= e($destacado['titulo']) ?></h2>
-        <p><?= e($destacado['extracto']) ?></p>
+        <span class="featured-label"<?= attrsCat($destacado['tag'], 'x') ?>>À la une · <?= e($destacado['tag']) ?></span>
+        <h2<?= attrs3($destacado['titulos']) ?>><?= e($destacado['titulo']) ?></h2>
+        <p<?= attrs3($destacado['extractos']) ?>><?= e($destacado['extracto']) ?></p>
         <div class="featured-meta"><span><?= e($destacado['fecha']) ?></span></div>
         <span class="read-btn" data-fr="Lire l&#39;article →" data-es="Leer el artículo →" data-en="Read the article →">Lire l'article →</span>
       </div>
@@ -227,9 +289,9 @@ function e($s) { return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
     <a class="blog-card" href="<?= e($p['file']) ?>" data-tag="<?= e($p['tag']) ?>">
       <div class="blog-card-img <?= $FONDOS[$i % count($FONDOS)] ?>"><?= $EMOJIS[crc32($p['file']) % count($EMOJIS)] ?></div>
       <div class="blog-card-body">
-        <span class="blog-tag"><?= e($p['tag']) ?></span>
-        <h2><?= e($p['titulo']) ?></h2>
-        <p><?= e($p['extracto']) ?></p>
+        <span class="blog-tag"<?= attrsCat($p['tag']) ?>><?= e($p['tag']) ?></span>
+        <h2<?= attrs3($p['titulos']) ?>><?= e($p['titulo']) ?></h2>
+        <p<?= attrs3($p['extractos']) ?>><?= e($p['extracto']) ?></p>
         <div class="blog-card-footer">
           <span class="blog-date"><?= e($p['fecha']) ?></span>
           <span class="read-more" data-fr="Lire →" data-es="Leer →" data-en="Read →">Lire →</span>

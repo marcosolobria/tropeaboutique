@@ -295,7 +295,18 @@
     </div>
     <div class="form-group"><label>Descripción FR</label><textarea id="p-desc-fr" placeholder="Description en français..."></textarea></div>
     <div class="form-group"><label>Descripción ES</label><textarea id="p-desc-es" placeholder="Descripción en español..."></textarea></div>
-    <div class="form-group"><label>URL imagen (opcional)</label><input type="text" id="p-image" placeholder="https://..."/></div>
+    <div class="form-group">
+      <label>Foto del producto</label>
+      <input type="file" id="p-photo" accept="image/*" onchange="uploadPhoto(this)"/>
+      <p id="p-photo-status" style="margin:6px 0 0;font-size:13px;color:#888"></p>
+      <img id="p-photo-preview" alt="" style="display:none;margin-top:10px;max-width:160px;border-radius:8px"/>
+      <label style="margin-top:12px;display:block">…o pega una URL</label>
+      <input type="text" id="p-image" placeholder="/assets/products/… o https://…" oninput="previewPhoto()"/>
+      <p style="margin:6px 0 0;font-size:12px;color:#888">
+        Los enlaces de Google Drive «para compartir» no muestran la foto en la web:
+        sube el archivo aquí y se guarda en el propio servidor.
+      </p>
+    </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeProductModal()">Cancelar</button>
       <button class="btn btn-primary" onclick="saveProduct()">Guardar producto</button>
@@ -357,7 +368,9 @@ function logout() {
 // ── API ────────────────────────────────────────────────────────
 async function api(data) {
   const fd = new FormData();
-  Object.entries(data).forEach(([k,v]) => fd.append(k, typeof v === 'object' ? JSON.stringify(v) : v));
+  // Los ficheros van tal cual; lo demás, si es objeto, en JSON.
+  Object.entries(data).forEach(([k,v]) =>
+    fd.append(k, (v instanceof Blob) ? v : (typeof v === 'object' ? JSON.stringify(v) : v)));
   const res = await fetch('/admin/api.php', {method:'POST', body: fd});
   return res.json();
 }
@@ -465,7 +478,37 @@ function openProductModal(idx) {
   document.getElementById('p-desc-fr').value = p?.desc_fr || p?.description || '';
   document.getElementById('p-desc-es').value = p?.desc_es || '';
   document.getElementById('p-image').value = p?.image || '';
+  document.getElementById('p-photo').value = '';
+  document.getElementById('p-photo-status').textContent = '';
+  previewPhoto();
   document.getElementById('product-modal').classList.add('open');
+}
+
+function previewPhoto() {
+  const url = document.getElementById('p-image').value.trim();
+  const img = document.getElementById('p-photo-preview');
+  img.style.display = url ? 'block' : 'none';
+  if (url) img.src = url;
+}
+
+async function uploadPhoto(input) {
+  const file = input.files && input.files[0];
+  if (!file) return;
+  const status = document.getElementById('p-photo-status');
+  status.textContent = '⏳ Subiendo…';
+  const res = await api({
+    action: 'upload_image',
+    photo: file,
+    name: document.getElementById('p-name').value.trim() || 'producto',
+  });
+  if (res.url) {
+    document.getElementById('p-image').value = res.url;
+    previewPhoto();
+    status.textContent = '✅ Subida. Recuerda pulsar «Guardar productos» al final.';
+  } else {
+    status.textContent = '❌ ' + (res.error || 'No se pudo subir');
+    input.value = '';
+  }
 }
 function closeProductModal() { document.getElementById('product-modal').classList.remove('open'); }
 function editProduct(i) { openProductModal(i); }

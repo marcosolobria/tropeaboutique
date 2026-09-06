@@ -1,0 +1,6 @@
+# Aquí solo hay fotos subidas desde el panel: nada ejecutable.
+# (Sin php_flag: LiteSpeed puede rechazarlo y tumbar la carpeta entera con un 500.)
+<FilesMatch "\.(php|phtml|phar|cgi|pl|py|sh)$">
+  Require all denied
+</FilesMatch>
+Options -Indexes

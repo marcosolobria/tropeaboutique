@@ -7,7 +7,7 @@ $action = $_POST['action'] ?? $_GET['action'] ?? '';
 
 switch ($action) {
 
-  // ── CHAT CON CLAUDE ──────────────────────────────────────────
+  // ── CHAT CON GEMINI (Google AI Studio, cuota gratuita) ─────
   case 'chat':
     $messages = json_decode($_POST['messages'] ?? '[]', true);
     if (empty($messages)) { echo json_encode(['error' => 'Sin mensajes']); exit; }
@@ -161,29 +161,58 @@ Eres TROPEA AI, la asistente inteligente y especializada de Tropea Boutique. Tie
 SYSTEM;
 
 
-    $contents = array_map(function ($m) {
+    if (!GEMINI_API_KEY) {
+      echo json_encode(['error' => 'Falta GEMINI_API_KEY en el .env del servidor']);
+      exit;
+    }
+
+    // Gemini llama "model" al turno del asistente, y el texto va en `parts`.
+    $contents = array_values(array_map(function ($m) {
       return [
         'role' => $m['role'] === 'assistant' ? 'model' : 'user',
-        'parts' => [['text' => $m['content']]],
+        'parts' => [['text' => (string) $m['content']]],
       ];
-    }, $messages);
+    }, $messages));
 
-    $ch = curl_init('https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=' . GEMINI_API_KEY);
+    $ch = curl_init('https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent');
     curl_setopt_array($ch, [
       CURLOPT_RETURNTRANSFER => true,
       CURLOPT_POST => true,
-      CURLOPT_HTTPHEADER => ['Content-Type: application/json'],
+      CURLOPT_TIMEOUT => 180,
+      // La clave va en cabecera, no en la URL: así no acaba en los logs del servidor.
+      CURLOPT_HTTPHEADER => [
+        'Content-Type: application/json',
+        'x-goog-api-key: ' . GEMINI_API_KEY,
+      ],
       CURLOPT_POSTFIELDS => json_encode([
         'system_instruction' => ['parts' => [['text' => $system]]],
         'contents' => $contents,
+        'generationConfig' => ['maxOutputTokens' => 8000],
       ]),
     ]);
     $res = curl_exec($ch);
     $err = curl_error($ch);
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
     if ($err) { echo json_encode(['error' => $err]); exit; }
     $data = json_decode($res, true);
-    $text = $data['candidates'][0]['content']['parts'][0]['text'] ?? ($data['error']['message'] ?? 'Error desconocido');
+    if ($code !== 200) {
+      $msg = $data['error']['message'] ?? "Error HTTP $code";
+      if ($code === 429) { $msg = 'Se ha agotado la cuota gratuita por ahora. Prueba en un minuto.'; }
+      echo json_encode(['error' => $msg]);
+      exit;
+    }
+    // La respuesta puede venir partida en varios `parts`: se juntan todos.
+    $text = '';
+    foreach ($data['candidates'][0]['content']['parts'] ?? [] as $part) {
+      if (isset($part['text'])) { $text .= $part['text']; }
+    }
+    if ($text === '') {
+      $reason = $data['candidates'][0]['finishReason'] ?? '';
+      if ($reason === 'SAFETY')          { $text = 'La petición se ha bloqueado por los filtros de seguridad. Prueba a reformularla.'; }
+      elseif ($reason === 'MAX_TOKENS')  { $text = 'La respuesta era demasiado larga. Pide el texto por partes.'; }
+      else                               { $text = 'Respuesta vacía del modelo'; }
+    }
     echo json_encode(['reply' => $text]);
     break;
 
@@ -198,6 +227,79 @@ SYSTEM;
     if (!is_array($products)) { echo json_encode(['error' => 'Datos inválidos']); exit; }
     file_put_contents(__DIR__ . '/../products.json', json_encode($products, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
     echo json_encode(['ok' => true]);
+    break;
+
+  // ── SUBIR FOTO DE PRODUCTO ───────────────────────────────────
+  // La foto se guarda en /assets/products/ del propio hosting. Así no depende
+  // de Google Drive, que sirve una página HTML y no la imagen.
+  case 'upload_image':
+    if (!isset($_FILES['photo']) || $_FILES['photo']['error'] !== UPLOAD_ERR_OK) {
+      $codes = [
+        UPLOAD_ERR_INI_SIZE => 'La foto pesa más de lo que admite el servidor',
+        UPLOAD_ERR_FORM_SIZE => 'La foto pesa demasiado',
+        UPLOAD_ERR_PARTIAL => 'La subida se cortó a medias',
+        UPLOAD_ERR_NO_FILE => 'No has elegido ninguna foto',
+      ];
+      $e = $_FILES['photo']['error'] ?? UPLOAD_ERR_NO_FILE;
+      echo json_encode(['error' => $codes[$e] ?? "Error de subida ($e)"]);
+      exit;
+    }
+
+    $tmp = $_FILES['photo']['tmp_name'];
+    if ($_FILES['photo']['size'] > 12 * 1024 * 1024) {
+      echo json_encode(['error' => 'La foto no puede pasar de 12 MB']);
+      exit;
+    }
+
+    // El tipo real se saca de la imagen, no del nombre ni de lo que diga el
+    // navegador: así no se cuela un .php renombrado.
+    $info = @getimagesize($tmp);
+    $exts = [IMAGETYPE_JPEG => 'jpg', IMAGETYPE_PNG => 'png', IMAGETYPE_WEBP => 'webp', IMAGETYPE_GIF => 'gif'];
+    if (!$info || !isset($exts[$info[2]])) {
+      echo json_encode(['error' => 'El archivo no es una imagen (JPG, PNG, WEBP o GIF)']);
+      exit;
+    }
+    $ext = $exts[$info[2]];
+
+    $dir = __DIR__ . '/../assets/products/';
+    if (!is_dir($dir) && !@mkdir($dir, 0755, true)) {
+      echo json_encode(['error' => 'No se pudo crear /assets/products/']);
+      exit;
+    }
+
+    $slug = strtolower(trim(preg_replace('/[^a-zA-Z0-9]+/', '-', $_POST['name'] ?? 'producto'), '-'));
+    if ($slug === '') { $slug = 'producto'; }
+    $name = substr($slug, 0, 40) . '-' . bin2hex(random_bytes(4)) . '.' . $ext;
+    $dest = $dir . $name;
+
+    // Las fotos de móvil vienen a 4000px y varios MB: se reducen a 1600px de
+    // lado mayor para que la tienda no tarde en cargar.
+    $resized = false;
+    if (function_exists('imagecreatefromstring') && max($info[0], $info[1]) > 1600 && $ext !== 'gif') {
+      $src = @imagecreatefromstring(file_get_contents($tmp));
+      if ($src) {
+        $scale = 1600 / max($info[0], $info[1]);
+        $w = (int) round($info[0] * $scale);
+        $h = (int) round($info[1] * $scale);
+        $dst = imagecreatetruecolor($w, $h);
+        if ($ext === 'png' || $ext === 'webp') {
+          imagealphablending($dst, false);
+          imagesavealpha($dst, true);
+        }
+        imagecopyresampled($dst, $src, 0, 0, 0, 0, $w, $h, $info[0], $info[1]);
+        if ($ext === 'png')       { $resized = imagepng($dst, $dest, 6); }
+        elseif ($ext === 'webp')  { $resized = imagewebp($dst, $dest, 85); }
+        else                      { $resized = imagejpeg($dst, $dest, 85); }
+        imagedestroy($src);
+        imagedestroy($dst);
+      }
+    }
+    if (!$resized && !move_uploaded_file($tmp, $dest)) {
+      echo json_encode(['error' => 'No se pudo guardar la foto en el servidor']);
+      exit;
+    }
+    @chmod($dest, 0644);
+    echo json_encode(['ok' => true, 'url' => '/assets/products/' . $name]);
     break;
 
   // ── BLOG ─────────────────────────────────────────────────────

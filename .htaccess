@@ -14,6 +14,9 @@ Options -Indexes
 
 RewriteEngine On
 
+# El sitemap se genera con PHP, pero Google lo pide en /sitemap.xml.
+RewriteRule ^sitemap\.xml$ /sitemap.php [L]
+
 # www → sin www (para LiteSpeed)
 RewriteCond %{HTTP_HOST} ^www\.tropeaboutique\.com$ [NC]
 RewriteRule ^ https://tropeaboutique.com%{REQUEST_URI} [R=301,L]

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# El panel y su API no pintan nada en Google.
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://tropeaboutique.com/sitemap.xml

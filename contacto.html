@@ -8,7 +8,7 @@
   <link rel="icon" href="assets/logo.svg" type="image/svg+xml"/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="style.css?v=20260906d"/>
   <style>
     /* ---- Contact page ---- */
     .cpage-hero {
@@ -93,6 +93,7 @@
     <a href="/" class="nav-logo"><img src="assets/logo.svg" alt="Tropea Boutique" class="nav-logo-img"/></a>
     <div class="nav-center-links">
       <a href="/" class="nav-link">Boutique</a>
+      <a href="sobre-mi.html" class="nav-link">Qui suis-je</a>
       <a href="blog/index.html" class="nav-link">Journal</a>
       <a href="contacto.html" class="nav-link" style="color:var(--black);font-weight:600">Contact</a>
     </div>
@@ -140,6 +141,17 @@
         <span class="channel-arrow">→</span>
       </a>
 
+      <a class="channel-card" href="mailto:info@tropeaboutique.com">
+        <div class="channel-icon icon-mail">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M2.5 6.5 12 13l9.5-6.5"/></svg>
+        </div>
+        <div class="channel-info">
+          <h3>Email</h3>
+          <p>info@tropeaboutique.com</p>
+        </div>
+        <span class="channel-arrow">→</span>
+      </a>
+
       <div class="love-quote">
         <blockquote>« L'amour se cache dans les petits détails — et c'est là qu'on le coud, le peint et l'emballe pour toi. »</blockquote>
         <cite>— Tropea Boutique, Marseille</cite>
@@ -175,6 +187,10 @@
           <label for="cf-msg">Ton message ✨</label>
           <textarea id="cf-msg" placeholder="Raconte-nous ton idée, le modèle de téléphone, les couleurs… on adore les détails !" required></textarea>
         </div>
+        <!-- Trampa para bots: invisible y fuera del recorrido del teclado.
+             Si llega rellenado, el servidor descarta el mensaje. -->
+        <input type="text" id="cf-website" name="website" tabindex="-1" autocomplete="off"
+               aria-hidden="true" style="position:absolute;left:-9999px;width:1px;height:1px"/>
         <button type="submit" class="btn-primary form-submit">Envoyer mon message 💌</button>
         <p class="form-note">On répond dans les 24h. Pour les urgences, WhatsApp est plus rapide !</p>
         <div class="form-success" id="form-success">
@@ -215,9 +231,11 @@
       <p>© 2026 Tropea Boutique · Marseille 🐟</p>
       <div class="footer-links" style="display:flex;gap:16px;flex-wrap:wrap">
         <a href="/">Boutique</a>
+        <a href="sobre-mi.html">Qui suis-je</a>
         <a href="blog/index.html">Journal</a>
         <a href="privacidad.html">Confidentialité</a>
         <a href="terminos.html">Conditions</a>
+        <a href="mailto:info@tropeaboutique.com">info@tropeaboutique.com</a>
       </div>
     </div>
   </footer>
@@ -237,6 +255,7 @@
       const fd = new FormData();
       fd.append('name', name); fd.append('email', email);
       fd.append('type', type); fd.append('message', msg);
+      fd.append('website', document.getElementById('cf-website').value);
       fetch('/api/save_message.php', {method:'POST', body: fd}).catch(()=>{});
       // Abrir WhatsApp
       const waMsg = encodeURIComponent(`Bonjour Tropea ! Je m'appelle ${name} (${email}) et j'aimerais : ${msg}`);

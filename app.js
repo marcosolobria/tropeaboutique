@@ -101,12 +101,36 @@ function applyLang() {
 }
 
 /* ===== PRODUCTS ===== */
+const PLACEHOLDER_IMG = 'https://placehold.co/600x600/fce8f0/d4607a?text=Tropea';
+
+// Un enlace de Google Drive "para compartir" apunta a una PÁGINA, no a la
+// imagen: en un <img> nunca carga. Se traduce a la URL de la miniatura, que sí
+// devuelve un JPEG. Solo funciona si el archivo está compartido con "cualquiera
+// con el enlace"; lo bueno es subir la foto al propio hosting.
+function imageUrlFrom(p) {
+  const raw = (p.image_url || p.image || '').trim();
+  if (!raw) return PLACEHOLDER_IMG;
+  const drive = raw.match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:.*&)?id=)([\w-]{20,})/);
+  if (drive) return `https://drive.google.com/thumbnail?id=${drive[1]}&sz=w1600`;
+  return raw;
+}
+
+// El panel de administración guarda `image`, `desc_fr` y `desc_es`; esta ficha
+// se escribió con `image_url` y `description_*`. Se aceptan los dos nombres.
+function normalizeProduct(p) {
+  return Object.assign({}, p, {
+    image_url: imageUrlFrom(p),
+    description_fr: p.description_fr || p.desc_fr || p.description || '',
+    description_es: p.description_es || p.desc_es || p.description || '',
+  });
+}
+
 async function loadProducts() {
   try {
     const res = await fetch('/products.json?v=' + Date.now());
     if (res.ok) {
       const data = await res.json();
-      products = Array.isArray(data) && data.length > 0 ? data : DEMO_PRODUCTS;
+      products = Array.isArray(data) && data.length > 0 ? data.map(normalizeProduct) : DEMO_PRODUCTS;
     } else {
       products = DEMO_PRODUCTS;
     }
@@ -167,7 +191,8 @@ function cardHTML(p) {
   return `
     <article class="product-card">
       <div class="card-img-wrap">
-        <img class="card-img" src="${p.image_url}" alt="${name}" loading="lazy"/>
+        <img class="card-img" src="${p.image_url}" alt="${name}" loading="lazy"
+             onerror="this.onerror=null;this.src='${PLACEHOLDER_IMG}'"/>
         ${p.collection ? `<span class="card-badge">${p.collection}</span>` : ''}
       </div>
       <div class="card-body">
